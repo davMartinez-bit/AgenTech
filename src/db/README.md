@@ -37,15 +37,22 @@ docker compose up -d
 | `01_extensiones.sql` | Habilita `vector` y `pg_trgm` |
 | `02_esquema.sql` | Tablas, índices, trigger, vista y función de búsqueda |
 | `03_carga_catalogo.sql` | Carga el catálogo de la ferretería desde `db/seed/catalogo_bsale.csv` |
+| `04_ampliacion_modelo.sql` | Modelos de embeddings, clientes de la API, detalle de ingestas, usuarios, registro de consultas y casos de prueba |
 
 ## Modelo
 
 - **categorias** y **marcas**: catálogos normalizados a partir del reporte de Bsale.
 - **productos**: SKU, código de barras, nombre, categoría, marca, precio y stock. `stock` es numérico porque hay productos que se venden por metro.
-- **producto_embeddings**: un vector de 768 dimensiones por producto, con el modelo y el texto que se usó para generarlo. Tiene índice HNSW por distancia coseno.
+- **producto_embeddings**: un vector de 768 dimensiones por producto, con el modelo (`modelo_id` → `modelos_embedding`) y el texto que se usó para generarlo. Tiene índice HNSW por distancia coseno.
 - **productos_pendientes_embedding** (vista): productos nuevos o cuyo nombre, descripción, categoría o marca cambió desde el último vector. Es la cola del worker de vectorización. Los cambios de stock o precio no generan un vector nuevo.
 - **buscar_productos(vector, limite, similitud_minima)**: devuelve los productos más parecidos a la consulta, solo entre los activos con stock mayor a cero.
 - **ingestas**: registro de cada carga por API, con los registros aceptados, rechazados y el detalle de errores.
+- **modelos_embedding**: modelos de embeddings disponibles y sus dimensiones.
+- **clientes_api**: sistemas que usan la API (POS, ERP o el chatbot). Cada ingesta y cada consulta indica qué cliente la hizo.
+- **ingesta_detalle**: resultado de cada registro de una ingesta (aceptado o rechazado, con su motivo). La carga inicial del catálogo queda registrada como una ingesta.
+- **usuarios**: vendedores, encargado de compras y administradores del chatbot.
+- **consultas** y **consulta_resultados**: cada búsqueda con su latencia y los productos que devolvió. La vista **resumen_consultas** entrega las métricas por día.
+- **casos_prueba** y **casos_prueba_esperados**: consultas de prueba con los productos que deberían aparecer, para medir la precisión.
 
 ## Actualizar el catálogo
 
