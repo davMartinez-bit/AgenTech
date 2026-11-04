@@ -1,0 +1,251 @@
+openapi: 3.1.0
+info:
+  title: API de AgenTech
+  version: 0.1.0
+  description: |
+    Ingesta del catálogo, consulta en lenguaje natural con búsqueda híbrida (semántica + filtro de stock)
+    y datos del panel administrativo. Todas las respuestas son JSON; los errores siguen el esquema `Error`.
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Ingesta
+  - name: Consulta
+  - name: Catálogo
+  - name: Panel administrativo
+paths:
+  /salud:
+    get:
+      summary: Estado de la API y la base de datos
+      responses:
+        "200": { description: Todo en orden }
+        "503": { description: La base de datos no responde }
+  /ingesta:
+    post:
+      tags: [Ingesta]
+      summary: Recibe el catálogo y lo guarda (alta o actualización por SKU)
+      description: |
+        Valida cada producto por separado. Los válidos se guardan y los inválidos se informan en `errores`
+        sin frenar al resto. Siempre se cumple `aceptados + rechazados = recibidos`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productos]
+              properties:
+                origen: { type: string, example: bsale-api }
+                cliente: { type: string, description: Nombre en clientes_api, example: Carga inicial desde Bsale }
+                productos:
+                  type: array
+                  items: { $ref: "#/components/schemas/ProductoIngesta" }
+      responses:
+        "201":
+          description: Ingesta registrada (puede traer rechazados)
+          content: { application/json: { schema: { $ref: "#/components/schemas/ResultadoIngesta" } } }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "422":
+          description: Todos los productos fueron rechazados
+          content: { application/json: { schema: { $ref: "#/components/schemas/ResultadoIngesta" } } }
+  /consulta:
+    post:
+      tags: [Consulta]
+      summary: Busca productos con una frase en lenguaje natural
+      description: |
+        Calcula el embedding de la frase con el mismo modelo del worker y llama a `buscar_productos`:
+        solo productos activos con stock > 0, ordenados por similitud, sobre el umbral `similitud_minima`.
+        Si nada supera el umbral, `resultados` viene vacío (no es un error).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [texto]
+              properties:
+                texto: { type: string, example: algo pa tapar goteras }
+                limite: { type: integer, minimum: 1, maximum: 50, default: 10 }
+                similitud_minima: { type: number, minimum: 0, maximum: 1 }
+                usuario_id: { type: integer }
+      responses:
+        "200":
+          description: Resultado de la búsqueda
+          content: { application/json: { schema: { $ref: "#/components/schemas/ResultadoConsulta" } } }
+        "400": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+  /productos:
+    get:
+      tags: [Catálogo]
+      summary: Lista el catálogo con filtros (búsqueda por texto, categoría, disponibles)
+      parameters:
+        - { name: q, in: query, schema: { type: string } }
+        - { name: categoria, in: query, schema: { type: string } }
+        - { name: disponibles, in: query, schema: { type: string, enum: ["true", "false"] } }
+        - { name: orden, in: query, schema: { type: string, enum: [nombre, precio_asc, precio_desc, stock] } }
+        - { name: pagina, in: query, schema: { type: integer, default: 1 } }
+        - { name: por_pagina, in: query, schema: { type: integer, default: 24, maximum: 100 } }
+      responses:
+        "200": { description: Página de productos }
+  /productos/{sku}:
+    get:
+      tags: [Catálogo]
+      summary: Ficha de un producto
+      parameters:
+        - { name: sku, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: Producto }
+        "404": { $ref: "#/components/responses/Error" }
+  /productos/{sku}/alternativas:
+    get:
+      tags: [Catálogo]
+      summary: Productos con stock más parecidos por significado (para ofrecer si el producto está agotado)
+      parameters:
+        - { name: sku, in: path, required: true, schema: { type: string } }
+        - { name: limite, in: query, schema: { type: integer, default: 4, maximum: 12 } }
+      responses:
+        "200": { description: Alternativas con stock y su similitud }
+  /productos/{sku}/complementos:
+    get:
+      tags: [Catálogo]
+      summary: Venta cruzada, lo que otros clientes llevaron en la misma boleta o factura
+      description: Calculado con las ventas reales leídas de Bsale. Excluye variantes de la misma familia.
+      parameters:
+        - { name: sku, in: path, required: true, schema: { type: string } }
+        - { name: limite, in: query, schema: { type: integer, default: 4, maximum: 12 } }
+      responses:
+        "200": { description: Complementos con stock, veces que se vendieron juntos y confianza }
+  /categorias:
+    get:
+      tags: [Catálogo]
+      summary: Categorías con cantidad de productos
+      responses:
+        "200": { description: Lista de categorías }
+  /admin/resumen:
+    get:
+      tags: [Panel administrativo]
+      summary: Indicadores principales (inventario, ventas, buscador, sincronización)
+      responses:
+        "200": { description: Indicadores }
+  /admin/graficos:
+    get:
+      tags: [Panel administrativo]
+      summary: Lista de gráficos disponibles
+      responses:
+        "200": { description: Gráficos }
+  /admin/graficos/{id}:
+    get:
+      tags: [Panel administrativo]
+      summary: Datos de un gráfico
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, example: ventas_por_dia } }
+      responses:
+        "200": { description: Datos del gráfico }
+        "404": { $ref: "#/components/responses/Error" }
+  /admin/interpretar:
+    post:
+      tags: [Panel administrativo]
+      summary: El agente explica un gráfico en lenguaje simple
+      description: El agente recibe solo los datos que calculó la base; no inventa cifras.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [grafico]
+              properties:
+                grafico: { type: string, example: ventas_por_categoria }
+      responses:
+        "200": { description: Interpretación }
+        "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+  /admin/ingestas:
+    get:
+      tags: [Panel administrativo]
+      summary: Últimas ingestas con sus rechazos
+      responses:
+        "200": { description: Ingestas }
+  /admin/consultas:
+    get:
+      tags: [Panel administrativo]
+      summary: Últimas consultas de los vendedores
+      responses:
+        "200": { description: Consultas }
+components:
+  responses:
+    Error:
+      description: Error
+      content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [codigo, mensaje]
+          properties:
+            codigo: { type: string, example: solicitud_invalida }
+            mensaje: { type: string }
+            detalles: {}
+    ProductoIngesta:
+      type: object
+      required: [sku, nombre, precio, stock]
+      properties:
+        sku: { type: string, maxLength: 40 }
+        nombre: { type: string, maxLength: 200 }
+        precio: { type: number, minimum: 0, description: Pesos con IVA }
+        stock: { type: number, description: Stock disponible (admite decimales para metros) }
+        categoria: { type: string }
+        marca: { type: string }
+        codigo_barras: { type: string }
+        unidad_medida: { type: string }
+        descripcion: { type: string }
+        permite_decimal: { type: boolean }
+        bsale_variante_id: { type: integer }
+    ResultadoIngesta:
+      type: object
+      properties:
+        ingesta_id: { type: integer }
+        creado_en: { type: string, format: date-time }
+        recibidos: { type: integer }
+        aceptados: { type: integer }
+        rechazados: { type: integer }
+        errores:
+          type: array
+          items:
+            type: object
+            properties:
+              posicion: { type: integer }
+              sku: { type: [string, "null"] }
+              motivo: { type: string }
+    ProductoResultado:
+      type: object
+      required: [sku, nombre, precio, stock, score]
+      properties:
+        sku: { type: string }
+        nombre: { type: string }
+        categoria: { type: [string, "null"] }
+        precio: { type: [number, "null"] }
+        stock: { type: number }
+        score: { type: number, description: Similitud coseno entre 0 y 1 }
+    ResultadoConsulta:
+      type: object
+      properties:
+        consulta_id: { type: integer }
+        texto: { type: string }
+        modelo: { type: string }
+        similitud_minima: { type: number }
+        latencia_ms: { type: integer }
+        agotado_parecido:
+          description: Producto que mejor calzaba pero está sin stock; los resultados son sus alternativas
+          oneOf:
+            - type: "null"
+            - type: object
+              properties:
+                sku: { type: string }
+                nombre: { type: string }
+        resultados:
+          type: array
+          items: { $ref: "#/components/schemas/ProductoResultado" }

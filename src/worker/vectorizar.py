@@ -21,8 +21,19 @@ import psycopg
 
 SRC = Path(__file__).resolve().parent.parent
 
-# nomic-embed-text distingue documentos y consultas con un prefijo
-PREFIJO_DOCUMENTO = "search_document: "
+# Algunos modelos distinguen documentos y consultas con un prefijo.
+# Deben coincidir con prefijoConsulta() en src/api/src/ollama.ts.
+PREFIJOS_DOCUMENTO = {
+    "nomic-embed-text": "search_document: ",
+    "nomic-embed-text-v2-moe": "search_document: ",
+}
+
+
+def prefijo_documento(modelo):
+    base = modelo.split(":")[0]
+    if "e5" in base:
+        return "passage: "
+    return PREFIJOS_DOCUMENTO.get(base, "")
 
 
 def cargar_env():
@@ -55,7 +66,7 @@ def embeddings(textos, modelo, url, dimensiones):
     with urllib.request.urlopen(pedido, timeout=600) as respuesta:
         vectores = json.loads(respuesta.read())["embeddings"]
     for v in vectores:
-        if len(v) != dimensiones:
+        if dimensiones and len(v) != dimensiones:
             raise ValueError(f"El modelo devolvió {len(v)} dimensiones; se esperaban {dimensiones}.")
     return vectores
 
@@ -82,7 +93,7 @@ def procesar_cola(con, modelo, url, lote):
 
     for i in range(0, total, lote):
         grupo = pendientes[i:i + lote]
-        vectores = embeddings([PREFIJO_DOCUMENTO + texto for _, texto in grupo], modelo, url, dimensiones)
+        vectores = embeddings([prefijo_documento(modelo) + texto for _, texto in grupo], modelo, url, dimensiones)
         with con.cursor() as cur:
             cur.executemany(
                 """
@@ -109,8 +120,8 @@ def main():
                         help="segundos entre revisiones de la cola; 0 = procesar una vez y terminar")
     args = parser.parse_args()
 
-    modelo = os.environ.get("EMBEDDING_MODEL", "nomic-embed-text")
-    url = os.environ.get("OLLAMA_URL", "http://localhost:11434").rstrip("/")
+    modelo = os.environ.get("EMBEDDING_MODEL", "nomic-embed-text-v2-moe")
+    url = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
 
     try:
         with conexion() as con:
