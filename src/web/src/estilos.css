@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Paleta de la tienda Ferre y Tapiz (tema/assets/theme.css del e-commerce). */
+@theme {
+  --font-sans: "Archivo", system-ui, sans-serif;
+  --color-negro: #111111;
+  --color-carbon: #2a2a2a;
+  --color-cobre: #c8946a;
+  --color-rojo: #9e1b2c;
+  --color-rojo-oscuro: #7a1421;
+  --color-crema: #f5ebe1;
+  --color-gris: #6b6b6b;
+  --color-borde: #d9d9d6;
+  --color-fondo: #f3f2ee;
+  --color-verde: #1fa855;
+}
+
+body {
+  @apply bg-fondo text-negro font-sans antialiased;
+}

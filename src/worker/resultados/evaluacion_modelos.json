@@ -1,0 +1,4557 @@
+[
+ {
+  "modelo": "nomic-embed-text",
+  "dimensiones": 768,
+  "acierto_5": 0.567,
+  "precision_5": 0.353,
+  "mrr": 0.464,
+  "latencia_consulta_ms_p50": 2076,
+  "segundos_vectorizar_catalogo": 139.6,
+  "detalle": [
+   {
+    "consulta": "tela resistente para tapizar un sillón",
+    "top": [
+     [
+      "Tapacanto PVC blanco rollo 200 mts",
+      0.608,
+      false
+     ],
+     [
+      "Pata Metalica Esquinero 8 cm Dorada",
+      0.603,
+      false
+     ],
+     [
+      "Silicona Tapagoteras 300 ml",
+      0.602,
+      false
+     ],
+     [
+      "Tapa Adhesiva roble provenzal set 50 und",
+      0.601,
+      false
+     ],
+     [
+      "Esmalte al Agua Semibrillo Blanco Tineta Passol",
+      0.6,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "relleno para el asiento de una silla",
+    "top": [
+     [
+      "Escuadra silla 25x25",
+      0.629,
+      false
+     ],
+     [
+      "Escuadra Silla 100x100",
+      0.619,
+      false
+     ],
+     [
+      "Escuadra Silla 40x40 Unidad",
+      0.612,
+      false
+     ],
+     [
+      "Escuadra Silla 75x75 Unidad",
+      0.61,
+      false
+     ],
+     [
+      "Silicona Barra Gruesa x kilo",
+      0.609,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo para pintar una reja de fierro que no se oxide",
+    "top": [
+     [
+      "Lija Pliego Fierro G 80",
+      0.652,
+      false
+     ],
+     [
+      "Pintura Spray Roja",
+      0.65,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G500",
+      0.64,
+      false
+     ],
+     [
+      "Masilla Retape Nogal  400 gr",
+      0.636,
+      false
+     ],
+     [
+      "Lija Pliego Fierro G 50",
+      0.632,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tornillos para colgar planchas de yeso cartón",
+    "top": [
+     [
+      "Tornillo crs 8x3 Zincado x caja 10000 und",
+      0.676,
+      false
+     ],
+     [
+      "Tornillo crs 8x4 Zincado x caja 100 und",
+      0.669,
+      false
+     ],
+     [
+      "Tornillo crs 6x1 Zincado x caja 100 und",
+      0.665,
+      false
+     ],
+     [
+      "Tornillo crs 6x2 Zincado x caja 10000 und",
+      0.665,
+      false
+     ],
+     [
+      "Tornillo crs 6x2 Zincado x caja 100 und",
+      0.663,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tarugos pal concreto",
+    "top": [
+     [
+      "Tarugo Clavo 8.0x60",
+      0.657,
+      true
+     ],
+     [
+      "Tarugo Clavo 6.0x60",
+      0.653,
+      true
+     ],
+     [
+      "Tarugo Clavo 6.0x80",
+      0.65,
+      true
+     ],
+     [
+      "Tarugo Clavo 8.0x80",
+      0.65,
+      true
+     ],
+     [
+      "Tarugo Clavo 8.0x100",
+      0.649,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "huincha pa medir",
+    "top": [
+     [
+      "Huincha Medir 3 mts toro negro",
+      0.712,
+      true
+     ],
+     [
+      "Huincha Medir 10 mts toro negro",
+      0.711,
+      true
+     ],
+     [
+      "Huincha Medir 7 mts toro negro",
+      0.707,
+      true
+     ],
+     [
+      "Huincha Medir 5 mts toro negro",
+      0.706,
+      true
+     ],
+     [
+      "Huincha Tapicera Verde rollo 50 mts",
+      0.62,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa tapar goteras",
+    "top": [
+     [
+      "Juego Pistola Aire Truper",
+      0.616,
+      false
+     ],
+     [
+      "Juego Brocas Madera 8 pcs Trupper",
+      0.614,
+      false
+     ],
+     [
+      "Pistola Pintar Asaki",
+      0.609,
+      false
+     ],
+     [
+      "Tapa Soberbio Grande almendra (100 und)",
+      0.606,
+      false
+     ],
+     [
+      "pistola para Aire Trupper",
+      0.603,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pegamento de contacto para cuero y goma",
+    "top": [
+     [
+      "Maceta Goma 12 onz",
+      0.636,
+      false
+     ],
+     [
+      "Cinta Doble Contacto 2 und",
+      0.63,
+      true
+     ],
+     [
+      "Limpia Contacto",
+      0.628,
+      true
+     ],
+     [
+      "Maceta Goma 16 onz",
+      0.622,
+      false
+     ],
+     [
+      "Fraguador Goma",
+      0.621,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "cinta de papel para pintar sin manchar",
+    "top": [
+     [
+      "Masilla Pistola Blanca 1 GL",
+      0.676,
+      false
+     ],
+     [
+      "Masilla Pistola Blanca 1/4 gl",
+      0.674,
+      false
+     ],
+     [
+      "Masilla Retape Nogal  400 gr",
+      0.658,
+      false
+     ],
+     [
+      "Esmalte Agua gl Azul Piedra Passol",
+      0.652,
+      false
+     ],
+     [
+      "Concentrado Azul 100 cc",
+      0.647,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "disco para cortar fierro con el esmeril",
+    "top": [
+     [
+      "Disco Traslape Fierro G 60",
+      0.644,
+      false
+     ],
+     [
+      "Disco Corte Dremel",
+      0.634,
+      true
+     ],
+     [
+      "Disco Corte 4 1/2 Krafter",
+      0.634,
+      true
+     ],
+     [
+      "Disco Traslape Fierro G 40",
+      0.633,
+      false
+     ],
+     [
+      "Disco Traslape Fierro G 80",
+      0.631,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "teflón pa la llave del agua",
+    "top": [
+     [
+      "Teflon Agua 1/2",
+      0.689,
+      true
+     ],
+     [
+      "Lija Pliego al Agua G240",
+      0.658,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G500",
+      0.64,
+      false
+     ],
+     [
+      "Felpa verde Agua",
+      0.616,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G1500",
+      0.616,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "manguera pal jardín",
+    "top": [
+     [
+      "Manguera Jardin 1/2 x metro",
+      0.714,
+      true
+     ],
+     [
+      "Manguera Aire Trupper  espiral 15 MT",
+      0.634,
+      false
+     ],
+     [
+      "Manguera Aire Trupper Lisa 15 MT",
+      0.616,
+      false
+     ],
+     [
+      "Manguera Aire Trupper  Lisa 10 MT",
+      0.611,
+      false
+     ],
+     [
+      "Conector Manguera 1/2",
+      0.602,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pilas chicas pal control remoto",
+    "top": [
+     [
+      "Control remoto TV Samsung",
+      0.613,
+      false
+     ],
+     [
+      "Control remoto TV LG",
+      0.603,
+      false
+     ],
+     [
+      "Chicharra 1/4 con dado 12 pcs",
+      0.601,
+      false
+     ],
+     [
+      "Masilla Retape Nogal  400 gr",
+      0.59,
+      false
+     ],
+     [
+      "Remachadora Pop Jaque",
+      0.584,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "enchufe para conectar varias cosas",
+    "top": [
+     [
+      "Enchufe Hembra Lexo 10 A",
+      0.644,
+      false
+     ],
+     [
+      "Enchufe Hembra Fanton 10 A",
+      0.642,
+      false
+     ],
+     [
+      "Enchufe Macho Stanford 10 A",
+      0.642,
+      false
+     ],
+     [
+      "Enchufe Hembra Fanton 16 A",
+      0.642,
+      false
+     ],
+     [
+      "Chinche  envejecido liso",
+      0.642,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "diluyente para limpiar las brochas",
+    "top": [
+     [
+      "Broca Avellanadora 10mm",
+      0.658,
+      false
+     ],
+     [
+      "Broca Madera 6,0mm",
+      0.654,
+      false
+     ],
+     [
+      "Broca Madera 4,0 mm",
+      0.653,
+      false
+     ],
+     [
+      "Broca Bisagra 35 mm",
+      0.649,
+      false
+     ],
+     [
+      "Broca Bisagra 26 mm",
+      0.649,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "rodillo para pintar la muralla",
+    "top": [
+     [
+      "Rodillo chiporro 22 cm",
+      0.708,
+      true
+     ],
+     [
+      "Rodillo Tigre esponja 15 cm",
+      0.705,
+      true
+     ],
+     [
+      "Rodillo Chiporro 18 cm",
+      0.704,
+      true
+     ],
+     [
+      "Rodillo Tigre esponja 4 cm",
+      0.704,
+      true
+     ],
+     [
+      "Rodillo Tigre esponja 9 cm",
+      0.7,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "bisagra para la puerta del mueble",
+    "top": [
+     [
+      "Bisagra Zapatero 3 filas PAR",
+      0.738,
+      true
+     ],
+     [
+      "Bisagra Cama Baul",
+      0.726,
+      true
+     ],
+     [
+      "Bisagra Recta 35 mm Cierre Suave",
+      0.708,
+      true
+     ],
+     [
+      "Bisagra 2 pulg Unidad",
+      0.696,
+      true
+     ],
+     [
+      "Bisagra 1 pulg Unidad",
+      0.694,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "tirador para el cajón",
+    "top": [
+     [
+      "Tirador cajon struco",
+      0.731,
+      true
+     ],
+     [
+      "Tirador Cajon Chico",
+      0.731,
+      true
+     ],
+     [
+      "Cerradura Cajon cuadrada economica",
+      0.645,
+      false
+     ],
+     [
+      "Tirador Rio Caoba",
+      0.645,
+      true
+     ],
+     [
+      "Tirador Paula Cerezo",
+      0.645,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "pistón a gas para mueble",
+    "top": [
+     [
+      "Piston Gas 80 N",
+      0.797,
+      true
+     ],
+     [
+      "Piston Gas 60 N",
+      0.794,
+      true
+     ],
+     [
+      "Patin Nylon 23 mm Café con clavo",
+      0.665,
+      false
+     ],
+     [
+      "Perno Cama 4,5 pulg par",
+      0.659,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G1500",
+      0.657,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "clavos para pegar en concreto",
+    "top": [
+     [
+      "Clavo rollo 2 pulg",
+      0.647,
+      false
+     ],
+     [
+      "Pegamac Tanke Blanco/Negro 57 gr",
+      0.643,
+      false
+     ],
+     [
+      "Clavo Corriente 3",
+      0.64,
+      false
+     ],
+     [
+      "Broca concreto 6 mm jaque",
+      0.639,
+      false
+     ],
+     [
+      "Clavo Corriente 4",
+      0.639,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "lija para madera",
+    "top": [
+     [
+      "Lija Pliego Madera G 180",
+      0.713,
+      true
+     ],
+     [
+      "Lija Pliego Madera G 40",
+      0.709,
+      true
+     ],
+     [
+      "Lija Pliego Madera G 60",
+      0.707,
+      true
+     ],
+     [
+      "Lija Pliego Madera G 120",
+      0.704,
+      true
+     ],
+     [
+      "Lija Pliego Madera G 80",
+      0.703,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "guantes pa trabajar",
+    "top": [
+     [
+      "pistola para Aire Trupper",
+      0.67,
+      false
+     ],
+     [
+      "Set Hoja Sierra Caladora Trupper 16 pcs",
+      0.664,
+      false
+     ],
+     [
+      "Guante Bolsa 100 und",
+      0.663,
+      true
+     ],
+     [
+      "Guante Cabritilla",
+      0.658,
+      true
+     ],
+     [
+      "Set Hoja Sierra Caladora Trupper 5 pcs",
+      0.657,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "silicona para el baño que no le salgan hongos",
+    "top": [
+     [
+      "Silicona Barra Gruesa x kilo",
+      0.696,
+      false
+     ],
+     [
+      "Silicona Barra Fina x kilo",
+      0.684,
+      false
+     ],
+     [
+      "Pistola Silicona 40w",
+      0.678,
+      false
+     ],
+     [
+      "Pistola Silicona 15 w",
+      0.651,
+      false
+     ],
+     [
+      "Silicona Montaje 280 ML",
+      0.635,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ácido pa limpiar la cerámica",
+    "top": [
+     [
+      "Espatula Truper plastica 3 pulg",
+      0.621,
+      false
+     ],
+     [
+      "Separador Ceramica 3.0 mm 200 pcs",
+      0.619,
+      false
+     ],
+     [
+      "Separador Ceramica 4 mm 200 pcs",
+      0.618,
+      false
+     ],
+     [
+      "Espatula Truper plastica 4 pulg",
+      0.617,
+      false
+     ],
+     [
+      "Amarra Plastica 300 mm blanco unidad",
+      0.614,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "flexible para la ducha",
+    "top": [
+     [
+      "Flexible ducha 1.5 mts",
+      0.761,
+      true
+     ],
+     [
+      "Set ducha 3 pcs",
+      0.643,
+      false
+     ],
+     [
+      "Soporte ducha Negro",
+      0.616,
+      false
+     ],
+     [
+      "Flexible Lavadora 2 mts",
+      0.598,
+      false
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.589,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ruedas para mover un mueble",
+    "top": [
+     [
+      "Rueda Silicona Naranja 4 pulg Unidad",
+      0.721,
+      true
+     ],
+     [
+      "Rueda Silicona Naranja 3 pulg Unidad",
+      0.718,
+      true
+     ],
+     [
+      "Rueda Silicona Naranja 2 pulg  Unidad",
+      0.717,
+      true
+     ],
+     [
+      "Rueda Giratoria 4 negra unidad",
+      0.716,
+      true
+     ],
+     [
+      "Rueda Silicona Naranja 5  pulg Unidad",
+      0.71,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "espuma para hacer cojines",
+    "top": [
+     [
+      "Pasamaneria Cafe Cojin",
+      0.646,
+      false
+     ],
+     [
+      "Escobilla con mango",
+      0.645,
+      false
+     ],
+     [
+      "Espuma Densidad 15 /1 cm (Azul)",
+      0.644,
+      true
+     ],
+     [
+      "Espuma Densidad 15 /2 cm (Azul)",
+      0.64,
+      true
+     ],
+     [
+      "Espuma Densidad 15 /3 cm (Azul)",
+      0.64,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "llave para apretar tuercas",
+    "top": [
+     [
+      "Llave Estrella Bolsa 8 pcs",
+      0.651,
+      false
+     ],
+     [
+      "pistola para Aire Trupper",
+      0.643,
+      false
+     ],
+     [
+      "Patin regulable Blanco con tuerca",
+      0.642,
+      false
+     ],
+     [
+      "llave punta corona 7 mm",
+      0.641,
+      true
+     ],
+     [
+      "Llave Esmeril",
+      0.639,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa ponerle candado al portón",
+    "top": [
+     [
+      "Manilla Porton Flor con base",
+      0.704,
+      false
+     ],
+     [
+      "Manilla Porton con base",
+      0.691,
+      false
+     ],
+     [
+      "Manilla Porton sin base",
+      0.673,
+      false
+     ],
+     [
+      "Rueda Porton 4\"",
+      0.663,
+      false
+     ],
+     [
+      "Esmalte al Agua Semibrillo Blanco Gl Passol",
+      0.654,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "botones para tapizar un respaldo",
+    "top": [
+     [
+      "Boton Lata n°18 1000 pares",
+      0.681,
+      true
+     ],
+     [
+      "Boton Lata n°22 1000 pares",
+      0.678,
+      true
+     ],
+     [
+      "matriz forrar botones 22 mm",
+      0.677,
+      true
+     ],
+     [
+      "matriz forrar botones 20 mm",
+      0.673,
+      true
+     ],
+     [
+      "matriz forrar botones 18 mm",
+      0.664,
+      true
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "modelo": "nomic-embed-text-v2-moe",
+  "dimensiones": 768,
+  "acierto_5": 0.8,
+  "precision_5": 0.54,
+  "mrr": 0.693,
+  "latencia_consulta_ms_p50": 2112,
+  "segundos_vectorizar_catalogo": 135.8,
+  "detalle": [
+   {
+    "consulta": "tela resistente para tapizar un sillón",
+    "top": [
+     [
+      "Lino caburgua Lila",
+      0.417,
+      true
+     ],
+     [
+      "Lino caburgua verde jade",
+      0.41,
+      true
+     ],
+     [
+      "Lino caburgua Terracota",
+      0.408,
+      true
+     ],
+     [
+      "Felpa Lila",
+      0.406,
+      true
+     ],
+     [
+      "Lino caburgua rosado",
+      0.402,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "relleno para el asiento de una silla",
+    "top": [
+     [
+      "Escuadra silla 25x25",
+      0.367,
+      false
+     ],
+     [
+      "Lino Andromeda Repelente beige",
+      0.356,
+      false
+     ],
+     [
+      "Escuadra Silla 50x50 Unidad",
+      0.353,
+      false
+     ],
+     [
+      "Escuadra Silla 100x100",
+      0.346,
+      false
+     ],
+     [
+      "Escuadra Silla 40x40 Unidad",
+      0.343,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo para pintar una reja de fierro que no se oxide",
+    "top": [
+     [
+      "Concentrado Rojo oxido 100 cc",
+      0.413,
+      false
+     ],
+     [
+      "Lija Pliego Fierro G 80",
+      0.384,
+      false
+     ],
+     [
+      "Pintura Spray Roja",
+      0.372,
+      false
+     ],
+     [
+      "Lija Pliego Fierro G 100",
+      0.372,
+      false
+     ],
+     [
+      "Broca Fierro 3 mm Jaque",
+      0.368,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tornillos para colgar planchas de yeso cartón",
+    "top": [
+     [
+      "Tornillo Escuadra 3,00x1",
+      0.416,
+      false
+     ],
+     [
+      "Hoja Cuchillo Cartonero (10 pcs )",
+      0.412,
+      false
+     ],
+     [
+      "Tornillo Escuadra 3,70x2",
+      0.409,
+      false
+     ],
+     [
+      "Tornillo Escuadra 6,00x3",
+      0.408,
+      false
+     ],
+     [
+      "Tornillo Hex.techo 12-14x1 1/4 p/b",
+      0.406,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tarugos pal concreto",
+    "top": [
+     [
+      "Tarugo Madera 12 mm 18 pcs",
+      0.38,
+      true
+     ],
+     [
+      "Tarugo Madera 6 mm 70 pcs",
+      0.374,
+      true
+     ],
+     [
+      "Tarugo Madera 10 mm 25 pcs",
+      0.37,
+      true
+     ],
+     [
+      "Tarugo Autoroscante 8 mm Bolsa 100 und",
+      0.361,
+      true
+     ],
+     [
+      "Tarugo Madera 8 mm 50 pcs",
+      0.36,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "huincha pa medir",
+    "top": [
+     [
+      "Huincha Medir 7 mts toro negro",
+      0.423,
+      true
+     ],
+     [
+      "Huincha Medir 3 mts toro negro",
+      0.414,
+      true
+     ],
+     [
+      "Huincha Medir 5 mts toro negro",
+      0.412,
+      true
+     ],
+     [
+      "Huincha Medir 10 mts toro negro",
+      0.408,
+      true
+     ],
+     [
+      "Huincha Tapicera Verde por metro",
+      0.362,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa tapar goteras",
+    "top": [
+     [
+      "Pata L  Plástica  Grande",
+      0.275,
+      false
+     ],
+     [
+      "Pata Chica con Vastago",
+      0.272,
+      false
+     ],
+     [
+      "Tapa Soberbio Grande almendra (100 und)",
+      0.272,
+      false
+     ],
+     [
+      "Tiza repuesto Tizador",
+      0.271,
+      false
+     ],
+     [
+      "Lino Andromeda Repelente Palo Rosa",
+      0.268,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pegamento de contacto para cuero y goma",
+    "top": [
+     [
+      "Pegamento Parche Bicicleta",
+      0.389,
+      false
+     ],
+     [
+      "Pegamac Tanke Blanco/Negro 57 gr",
+      0.348,
+      false
+     ],
+     [
+      "Cuerina envejecida Beige",
+      0.342,
+      false
+     ],
+     [
+      "Cinta Doble Contacto 2 und",
+      0.335,
+      true
+     ],
+     [
+      "Pegamac Tanke Verde/Negro 57 gr",
+      0.333,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "cinta de papel para pintar sin manchar",
+    "top": [
+     [
+      "Brocha 1 pulg",
+      0.369,
+      false
+     ],
+     [
+      "Cinta Masking 40 mts x36 mm",
+      0.362,
+      true
+     ],
+     [
+      "Cinta Embalaje Transparente",
+      0.356,
+      false
+     ],
+     [
+      "Cinta Masking 40 mts x24 mm",
+      0.355,
+      true
+     ],
+     [
+      "Cinta Masking 40 mts x48 mm",
+      0.355,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "disco para cortar fierro con el esmeril",
+    "top": [
+     [
+      "Disco Traslape Fierro G 40",
+      0.438,
+      false
+     ],
+     [
+      "Disco Traslape Fierro G 80",
+      0.437,
+      false
+     ],
+     [
+      "Disco Traslape Fierro G 100",
+      0.434,
+      false
+     ],
+     [
+      "Disco Diamantado Tubo 4 1/2",
+      0.422,
+      false
+     ],
+     [
+      "Disco Traslape Fierro G 60",
+      0.418,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "teflón pa la llave del agua",
+    "top": [
+     [
+      "Teflon Agua 1/2",
+      0.379,
+      true
+     ],
+     [
+      "Felpa verde Agua",
+      0.285,
+      false
+     ],
+     [
+      "Teflon Gas 1/2",
+      0.284,
+      true
+     ],
+     [
+      "llave jardin bola 1/2",
+      0.27,
+      false
+     ],
+     [
+      "Tarugo Clavo 6.0x60",
+      0.261,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "manguera pal jardín",
+    "top": [
+     [
+      "Manguera Jardin 1/2 x metro",
+      0.464,
+      true
+     ],
+     [
+      "Manguera Aire espiral Total 10 mts",
+      0.371,
+      false
+     ],
+     [
+      "Manguera descarga lavadora 2 mts",
+      0.342,
+      false
+     ],
+     [
+      "Manguera Gas Amarilla",
+      0.332,
+      false
+     ],
+     [
+      "Union Manguera 1/2 negra",
+      0.323,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pilas chicas pal control remoto",
+    "top": [
+     [
+      "Pila Duracell AAA",
+      0.324,
+      true
+     ],
+     [
+      "Pila Duracell AA",
+      0.319,
+      false
+     ],
+     [
+      "Pila Eveready AAA",
+      0.301,
+      true
+     ],
+     [
+      "Lino Andromeda Repelente Palo Rosa",
+      0.3,
+      false
+     ],
+     [
+      "Pila Eveready AA",
+      0.296,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "enchufe para conectar varias cosas",
+    "top": [
+     [
+      "Enchufe embutido triple Directo 10 A lexo",
+      0.426,
+      true
+     ],
+     [
+      "Enchufe embutido Doble Directo 10 A lexo",
+      0.424,
+      false
+     ],
+     [
+      "Enchufe embutido Triple Directo 10/16 A lexo",
+      0.423,
+      true
+     ],
+     [
+      "Enchufe Macho Lexo 10 A",
+      0.415,
+      false
+     ],
+     [
+      "Enchufe 16-10 Amp",
+      0.414,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "diluyente para limpiar las brochas",
+    "top": [
+     [
+      "Diluyente Sintético  1 litro",
+      0.388,
+      true
+     ],
+     [
+      "Diluyente Sintético  5 litros",
+      0.371,
+      true
+     ],
+     [
+      "Diluyente Poliuretano 1 L",
+      0.365,
+      true
+     ],
+     [
+      "Diluyente Duco 1 litro",
+      0.361,
+      true
+     ],
+     [
+      "Diluyente Duco Granel 1 litro",
+      0.358,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "rodillo para pintar la muralla",
+    "top": [
+     [
+      "Rodillo chiporro 22 cm",
+      0.451,
+      true
+     ],
+     [
+      "Rodillo Chiporro 18 cm",
+      0.446,
+      true
+     ],
+     [
+      "Rodillo esponja 18 cm Valkolor",
+      0.44,
+      true
+     ],
+     [
+      "Rodillo Tigre esponja 15 cm",
+      0.429,
+      true
+     ],
+     [
+      "Rodillo Tigre esponja 9 cm",
+      0.427,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "bisagra para la puerta del mueble",
+    "top": [
+     [
+      "Bisagra Recta 35 mm Cierre Suave",
+      0.489,
+      true
+     ],
+     [
+      "Bisagra Cama Baul",
+      0.475,
+      true
+     ],
+     [
+      "Bisagra semicurva 35 mm Cierre Suave und",
+      0.456,
+      true
+     ],
+     [
+      "Bisagra Zapatero 3 filas PAR",
+      0.456,
+      true
+     ],
+     [
+      "Soporte Repisa Fijo Beige",
+      0.402,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tirador para el cajón",
+    "top": [
+     [
+      "Tirador Cajon Chico",
+      0.425,
+      true
+     ],
+     [
+      "Tirador cajon struco",
+      0.414,
+      true
+     ],
+     [
+      "Tirador Concha Negro",
+      0.379,
+      true
+     ],
+     [
+      "Tirador puerta Chico",
+      0.372,
+      true
+     ],
+     [
+      "Tirador Madrid 128 mm Zincado Set 50 und",
+      0.369,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "pistón a gas para mueble",
+    "top": [
+     [
+      "Piston Gas 60 N",
+      0.498,
+      true
+     ],
+     [
+      "Piston Gas 80 N",
+      0.491,
+      true
+     ],
+     [
+      "Pistola Pintar Muzi",
+      0.395,
+      false
+     ],
+     [
+      "Masilla Pistola Blanca 1/4 gl",
+      0.379,
+      false
+     ],
+     [
+      "Patin Base Blanco",
+      0.375,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "clavos para pegar en concreto",
+    "top": [
+     [
+      "Broca concreto 6 mm jaque",
+      0.396,
+      false
+     ],
+     [
+      "Clavo rollo 2 pulg",
+      0.384,
+      false
+     ],
+     [
+      "Clavo Hilti 3.7x3",
+      0.371,
+      true
+     ],
+     [
+      "Tarugo Clavo 6.0x60",
+      0.367,
+      false
+     ],
+     [
+      "Clavo Hilti 3.7x1 1/2",
+      0.364,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "lija para madera",
+    "top": [
+     [
+      "Lija madera x metro G 60",
+      0.525,
+      true
+     ],
+     [
+      "Lija madera x metro G 180",
+      0.522,
+      true
+     ],
+     [
+      "Lija madera x metro G 120",
+      0.522,
+      true
+     ],
+     [
+      "Lija madera x metro G 100",
+      0.519,
+      true
+     ],
+     [
+      "Lija madera x metro G 80",
+      0.509,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "guantes pa trabajar",
+    "top": [
+     [
+      "Guante Negro PU",
+      0.382,
+      true
+     ],
+     [
+      "Guante Cabritilla",
+      0.319,
+      true
+     ],
+     [
+      "Guante Bolsa 100 und",
+      0.292,
+      true
+     ],
+     [
+      "Patin regulable Blanco con tuerca",
+      0.271,
+      false
+     ],
+     [
+      "Grata Taladro JA18225",
+      0.261,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "silicona para el baño que no le salgan hongos",
+    "top": [
+     [
+      "Silicona Acrilico Blanco 280 ml",
+      0.391,
+      false
+     ],
+     [
+      "Silicona Tapagoteras 300 ml",
+      0.382,
+      false
+     ],
+     [
+      "Silicona Liquida 250 ml",
+      0.381,
+      false
+     ],
+     [
+      "Silicona Liquida 100 ml",
+      0.379,
+      false
+     ],
+     [
+      "Silicona Montaje 280 ML",
+      0.373,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ácido pa limpiar la cerámica",
+    "top": [
+     [
+      "Concentrado Rojo oxido 100 cc",
+      0.331,
+      false
+     ],
+     [
+      "Separador Ceramica 3.0 mm 200 pcs",
+      0.316,
+      false
+     ],
+     [
+      "Separador Ceramica 2.5 mm 200 pcs",
+      0.313,
+      false
+     ],
+     [
+      "Separador Ceramica 4 mm 200 pcs",
+      0.312,
+      false
+     ],
+     [
+      "Acido Muriatico 5 Litros",
+      0.31,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "flexible para la ducha",
+    "top": [
+     [
+      "Flexible ducha 1.5 mts",
+      0.562,
+      true
+     ],
+     [
+      "Soporte ducha Negro",
+      0.409,
+      false
+     ],
+     [
+      "Set ducha 3 pcs",
+      0.408,
+      false
+     ],
+     [
+      "Flexible Lavadora 2 mts",
+      0.405,
+      false
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.393,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ruedas para mover un mueble",
+    "top": [
+     [
+      "Rueda Giratoria 1 1,5 unidad",
+      0.484,
+      true
+     ],
+     [
+      "Rueda Giratoria 3 negra unidad",
+      0.46,
+      true
+     ],
+     [
+      "Rueda Giratoria 2 pulg negra unidad",
+      0.459,
+      true
+     ],
+     [
+      "Rueda Giratoria 4 negra unidad",
+      0.459,
+      true
+     ],
+     [
+      "Rueda Silicona Naranja 2 pulg  Unidad",
+      0.455,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "espuma para hacer cojines",
+    "top": [
+     [
+      "espuma 25/5 cm",
+      0.449,
+      true
+     ],
+     [
+      "espuma 25/10 cm",
+      0.44,
+      true
+     ],
+     [
+      "Espuma Densidad 15 /7 cm (Azul)",
+      0.437,
+      true
+     ],
+     [
+      "Espuma 21/1 cm",
+      0.434,
+      true
+     ],
+     [
+      "Espuma 25/2 cm",
+      0.434,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "llave para apretar tuercas",
+    "top": [
+     [
+      "Tuerca Anclaje Muebles 1/4 caja 100 und",
+      0.386,
+      false
+     ],
+     [
+      "llave punta corona 16 mm",
+      0.366,
+      true
+     ],
+     [
+      "llave punta corona 9 mm",
+      0.362,
+      true
+     ],
+     [
+      "llave punta corona 6 mm",
+      0.362,
+      true
+     ],
+     [
+      "llave punta corona 12 mm",
+      0.359,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa ponerle candado al portón",
+    "top": [
+     [
+      "Portacandado 3.5 mm",
+      0.311,
+      true
+     ],
+     [
+      "Portacandado 1.5 mm",
+      0.31,
+      true
+     ],
+     [
+      "Portacandado 2.0 mm",
+      0.309,
+      true
+     ],
+     [
+      "Portacandado 4.5 mm",
+      0.303,
+      true
+     ],
+     [
+      "Tirador puerta Chico",
+      0.298,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "botones para tapizar un respaldo",
+    "top": [
+     [
+      "matriz forrar botones 22 mm",
+      0.483,
+      true
+     ],
+     [
+      "matriz forrar botones 18 mm",
+      0.461,
+      true
+     ],
+     [
+      "matriz forrar botones 20 mm",
+      0.46,
+      true
+     ],
+     [
+      "Boton Lata n°18 1000 pares",
+      0.433,
+      true
+     ],
+     [
+      "Boton Lata n°22 1000 pares",
+      0.427,
+      true
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "modelo": "granite-embedding:278m",
+  "dimensiones": 768,
+  "acierto_5": 0.667,
+  "precision_5": 0.327,
+  "mrr": 0.517,
+  "latencia_consulta_ms_p50": 2099,
+  "segundos_vectorizar_catalogo": 129.6,
+  "detalle": [
+   {
+    "consulta": "tela resistente para tapizar un sillón",
+    "top": [
+     [
+      "espuma 25/10 cm",
+      0.684,
+      false
+     ],
+     [
+      "Soporte Repisa Transparente",
+      0.677,
+      false
+     ],
+     [
+      "Tacha plateada Tira",
+      0.677,
+      false
+     ],
+     [
+      "Lino Andromeda Repelente Plata",
+      0.675,
+      true
+     ],
+     [
+      "Union Cama Plastico par",
+      0.674,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "relleno para el asiento de una silla",
+    "top": [
+     [
+      "Soporte Repisa Fijo Café",
+      0.678,
+      false
+     ],
+     [
+      "Perno Cama 5 pulg par",
+      0.67,
+      false
+     ],
+     [
+      "Soporte Repisa Almendra",
+      0.666,
+      false
+     ],
+     [
+      "Tapilla Buga Par",
+      0.665,
+      false
+     ],
+     [
+      "Soporte Repisa Negro",
+      0.663,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo para pintar una reja de fierro que no se oxide",
+    "top": [
+     [
+      "Pintura Spray Oro",
+      0.637,
+      false
+     ],
+     [
+      "Tinta kromatin Tabaco 1 litro",
+      0.626,
+      false
+     ],
+     [
+      "Pistola Pintar Asaki",
+      0.625,
+      false
+     ],
+     [
+      "Pata Metalica Esquinero 8 cm Dorada",
+      0.624,
+      false
+     ],
+     [
+      "Lino caburgua Azul petroleo",
+      0.622,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tornillos para colgar planchas de yeso cartón",
+    "top": [
+     [
+      "Hoja Cuchillo Cartonero (10 pcs )",
+      0.716,
+      false
+     ],
+     [
+      "Cuchillo Cartonero con respuesto",
+      0.711,
+      false
+     ],
+     [
+      "Cuchillo Cartonero Metalico Kamasa",
+      0.71,
+      false
+     ],
+     [
+      "Hoja Cuchillo Cartonero Trupper",
+      0.707,
+      false
+     ],
+     [
+      "Cuchillo Cartonero JCTOP",
+      0.699,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tarugos pal concreto",
+    "top": [
+     [
+      "Tarugo Madera 6 mm 70 pcs",
+      0.699,
+      true
+     ],
+     [
+      "Tapilla Buga Par",
+      0.695,
+      false
+     ],
+     [
+      "Pata L Madera Miel",
+      0.694,
+      false
+     ],
+     [
+      "Union Cama Plastico par",
+      0.694,
+      false
+     ],
+     [
+      "Acero liquido rex",
+      0.692,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "huincha pa medir",
+    "top": [
+     [
+      "Huincha Medir 10 mts toro negro",
+      0.699,
+      true
+     ],
+     [
+      "Huincha Medir 5 mts toro negro",
+      0.698,
+      true
+     ],
+     [
+      "Huincha Medir 7 mts toro negro",
+      0.693,
+      true
+     ],
+     [
+      "Huincha Medir 3 mts toro negro",
+      0.685,
+      true
+     ],
+     [
+      "Bisagra 1 pulg Unidad",
+      0.672,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa tapar goteras",
+    "top": [
+     [
+      "pu eco Café",
+      0.685,
+      false
+     ],
+     [
+      "pu eco Cafe con manchas",
+      0.664,
+      false
+     ],
+     [
+      "Guante Cabritilla",
+      0.656,
+      false
+     ],
+     [
+      "Pu eco Crudo",
+      0.654,
+      false
+     ],
+     [
+      "Laca  Granel",
+      0.652,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pegamento de contacto para cuero y goma",
+    "top": [
+     [
+      "Cinta Doble Contacto 2 und",
+      0.702,
+      true
+     ],
+     [
+      "Limpia Contacto",
+      0.679,
+      true
+     ],
+     [
+      "Afix Super Contact 1/4 gl",
+      0.668,
+      true
+     ],
+     [
+      "Afix Super Contact 1 gl",
+      0.666,
+      true
+     ],
+     [
+      "Saco Escombro und",
+      0.656,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "cinta de papel para pintar sin manchar",
+    "top": [
+     [
+      "Masilla Poliester Sipa 1 k",
+      0.686,
+      false
+     ],
+     [
+      "Tinta kromatin Miel 1 litro",
+      0.678,
+      false
+     ],
+     [
+      "Tinta kromatin Nogal 1 litro",
+      0.672,
+      false
+     ],
+     [
+      "Tinta kromatin Cerezo 1 litro",
+      0.669,
+      false
+     ],
+     [
+      "Tinta kromatin Rauli  1 litro",
+      0.669,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "disco para cortar fierro con el esmeril",
+    "top": [
+     [
+      "Disco Corte Dremel",
+      0.739,
+      true
+     ],
+     [
+      "Disco Corte Ceramica 4 1/2 Liso-Humedo Jaque",
+      0.721,
+      true
+     ],
+     [
+      "Disco Corte 4 1/2 Krafter",
+      0.714,
+      true
+     ],
+     [
+      "Disco Corte 7x3 mm",
+      0.703,
+      true
+     ],
+     [
+      "Disco corte Madera 7 1/4-40 D",
+      0.691,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "teflón pa la llave del agua",
+    "top": [
+     [
+      "Felpa verde Agua",
+      0.694,
+      false
+     ],
+     [
+      "Teflon Agua 1/2",
+      0.666,
+      true
+     ],
+     [
+      "Perno estanque WC",
+      0.658,
+      false
+     ],
+     [
+      "llave punta corona 9 mm",
+      0.647,
+      false
+     ],
+     [
+      "llave punta corona 8 mm",
+      0.646,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "manguera pal jardín",
+    "top": [
+     [
+      "llave jardin bola 1/2",
+      0.736,
+      false
+     ],
+     [
+      "Manguera Jardin 1/2 x metro",
+      0.725,
+      true
+     ],
+     [
+      "Tijera Pin",
+      0.7,
+      false
+     ],
+     [
+      "Tapilla Buga Par",
+      0.689,
+      false
+     ],
+     [
+      "Perno anclaje wc",
+      0.682,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pilas chicas pal control remoto",
+    "top": [
+     [
+      "Control remoto TV LG",
+      0.685,
+      false
+     ],
+     [
+      "Control remoto TV Samsung",
+      0.685,
+      false
+     ],
+     [
+      "Pata L  Plástica  Chica",
+      0.656,
+      false
+     ],
+     [
+      "Pila Eveready AAA",
+      0.647,
+      true
+     ],
+     [
+      "Felpa Palo Rosa",
+      0.632,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "enchufe para conectar varias cosas",
+    "top": [
+     [
+      "amarra cable pequeña",
+      0.681,
+      false
+     ],
+     [
+      "Conector Macho 1/4  Truper",
+      0.647,
+      false
+     ],
+     [
+      "Soquete loza",
+      0.635,
+      false
+     ],
+     [
+      "Conector Hembra 1/4  Truper",
+      0.634,
+      false
+     ],
+     [
+      "Enchufe 16-10 Amp",
+      0.627,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "diluyente para limpiar las brochas",
+    "top": [
+     [
+      "Limpia Contacto",
+      0.695,
+      false
+     ],
+     [
+      "Disco Corte Dremel",
+      0.681,
+      false
+     ],
+     [
+      "Chinche  envejecido liso",
+      0.675,
+      false
+     ],
+     [
+      "Llave Gasfiter",
+      0.668,
+      false
+     ],
+     [
+      "Destornillador Pata Cabra",
+      0.663,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "rodillo para pintar la muralla",
+    "top": [
+     [
+      "Rodillo chiporro 22 cm",
+      0.708,
+      true
+     ],
+     [
+      "Chenille Morado",
+      0.704,
+      false
+     ],
+     [
+      "Rodillo Tigre esponja 9 cm",
+      0.697,
+      true
+     ],
+     [
+      "Rodillo Tigre esponja 4 cm",
+      0.689,
+      true
+     ],
+     [
+      "Brocha 1 pulg",
+      0.685,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "bisagra para la puerta del mueble",
+    "top": [
+     [
+      "Bisagra Cama Baul",
+      0.796,
+      true
+     ],
+     [
+      "Tapilla Buga Par",
+      0.776,
+      false
+     ],
+     [
+      "Chapa Vitrina",
+      0.773,
+      false
+     ],
+     [
+      "Soporte Barra U Blanco",
+      0.721,
+      false
+     ],
+     [
+      "Soporte Barra U Café",
+      0.72,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tirador para el cajón",
+    "top": [
+     [
+      "Tirador cajon struco",
+      0.747,
+      true
+     ],
+     [
+      "caja tabique",
+      0.746,
+      false
+     ],
+     [
+      "Tirador Cajon Chico",
+      0.737,
+      true
+     ],
+     [
+      "Tirador Pux Caoba",
+      0.735,
+      true
+     ],
+     [
+      "Tirador Trebol",
+      0.732,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "pistón a gas para mueble",
+    "top": [
+     [
+      "Piston Gas 80 N",
+      0.771,
+      true
+     ],
+     [
+      "Piston Gas 60 N",
+      0.764,
+      true
+     ],
+     [
+      "Regulador Gas para manguera",
+      0.755,
+      false
+     ],
+     [
+      "Gas Butano Cocinilla",
+      0.744,
+      false
+     ],
+     [
+      "Llave Gasfiter",
+      0.729,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "clavos para pegar en concreto",
+    "top": [
+     [
+      "llave punta corona 10 mm",
+      0.686,
+      false
+     ],
+     [
+      "llave punta corona 12 mm",
+      0.685,
+      false
+     ],
+     [
+      "llave punta corona 7 mm",
+      0.684,
+      false
+     ],
+     [
+      "llave punta corona 6 mm",
+      0.682,
+      false
+     ],
+     [
+      "llave punta corona 11 mm",
+      0.68,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "lija para madera",
+    "top": [
+     [
+      "Tiza",
+      0.714,
+      false
+     ],
+     [
+      "Tijera Pin",
+      0.709,
+      false
+     ],
+     [
+      "Lino Boucle",
+      0.701,
+      false
+     ],
+     [
+      "Lija madera x metro G 100",
+      0.7,
+      true
+     ],
+     [
+      "Lija madera x metro G 80",
+      0.699,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "guantes pa trabajar",
+    "top": [
+     [
+      "Llave Gasfiter",
+      0.702,
+      false
+     ],
+     [
+      "Llave Esmeril",
+      0.687,
+      false
+     ],
+     [
+      "Fraguador Goma",
+      0.682,
+      false
+     ],
+     [
+      "Guante Cabritilla",
+      0.672,
+      true
+     ],
+     [
+      "amarra cable pequeña",
+      0.671,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "silicona para el baño que no le salgan hongos",
+    "top": [
+     [
+      "Silicona Liquida 100 ml",
+      0.669,
+      false
+     ],
+     [
+      "Silicona Acetica c/fungicida Transparente",
+      0.664,
+      true
+     ],
+     [
+      "Silicona Tapagoteras 300 ml",
+      0.661,
+      false
+     ],
+     [
+      "Silicona Acetica c/fungicida blanca",
+      0.66,
+      true
+     ],
+     [
+      "Silicona Neutra Gris 280 ml",
+      0.658,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ácido pa limpiar la cerámica",
+    "top": [
+     [
+      "Limpia Contacto",
+      0.702,
+      false
+     ],
+     [
+      "Pu eco Crudo",
+      0.678,
+      false
+     ],
+     [
+      "Aceite Singer 100 cc",
+      0.669,
+      false
+     ],
+     [
+      "Tijera Titanium",
+      0.663,
+      false
+     ],
+     [
+      "Masilla Poliester Sipa 1 k",
+      0.66,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "flexible para la ducha",
+    "top": [
+     [
+      "Flexible ducha 1.5 mts",
+      0.772,
+      true
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.738,
+      false
+     ],
+     [
+      "Flexible Lavadora 2 mts",
+      0.734,
+      false
+     ],
+     [
+      "Pasacable Gris Claro",
+      0.69,
+      false
+     ],
+     [
+      "Union Cama Plastico par",
+      0.667,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ruedas para mover un mueble",
+    "top": [
+     [
+      "Rueda Giratoria 1 1,5 unidad",
+      0.693,
+      true
+     ],
+     [
+      "Rueda Fija 1 1/2",
+      0.683,
+      true
+     ],
+     [
+      "Tirador Pux Caoba",
+      0.68,
+      false
+     ],
+     [
+      "Perno Cama 5 pulg par",
+      0.679,
+      false
+     ],
+     [
+      "Soporte Repisa Almendra",
+      0.674,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "espuma para hacer cojines",
+    "top": [
+     [
+      "espuma 25/10 cm",
+      0.714,
+      true
+     ],
+     [
+      "espuma 25/5 cm",
+      0.707,
+      true
+     ],
+     [
+      "Espuma 21/1 cm",
+      0.695,
+      true
+     ],
+     [
+      "Espuma 21/2 cm",
+      0.692,
+      true
+     ],
+     [
+      "Molido Espuma IVANIA",
+      0.685,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "llave para apretar tuercas",
+    "top": [
+     [
+      "llave punta corona 14 mm",
+      0.72,
+      true
+     ],
+     [
+      "llave punta corona 10 mm",
+      0.717,
+      true
+     ],
+     [
+      "llave punta corona 7 mm",
+      0.712,
+      true
+     ],
+     [
+      "llave punta corona 9 mm",
+      0.712,
+      true
+     ],
+     [
+      "llave punta corona 12 mm",
+      0.708,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa ponerle candado al portón",
+    "top": [
+     [
+      "pu eco Café",
+      0.648,
+      false
+     ],
+     [
+      "pu eco Cafe con manchas",
+      0.645,
+      false
+     ],
+     [
+      "pu eco White",
+      0.629,
+      false
+     ],
+     [
+      "pu eco Negro",
+      0.625,
+      false
+     ],
+     [
+      "Perno anclaje wc",
+      0.624,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "botones para tapizar un respaldo",
+    "top": [
+     [
+      "matriz forrar botones 22 mm",
+      0.718,
+      true
+     ],
+     [
+      "matriz forrar botones 20 mm",
+      0.691,
+      true
+     ],
+     [
+      "matriz forrar botones 18 mm",
+      0.677,
+      true
+     ],
+     [
+      "llave punta corona 10 mm",
+      0.661,
+      false
+     ],
+     [
+      "llave punta corona 14 mm",
+      0.661,
+      false
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "modelo": "hf.co/vectorlink/multilingual-e5-base-GGUF",
+  "dimensiones": 768,
+  "acierto_5": 0.733,
+  "precision_5": 0.427,
+  "mrr": 0.633,
+  "latencia_consulta_ms_p50": 2095,
+  "segundos_vectorizar_catalogo": 118.3,
+  "detalle": [
+   {
+    "consulta": "tela resistente para tapizar un sillón",
+    "top": [
+     [
+      "Lino Andromeda Repelente Taupe",
+      0.848,
+      true
+     ],
+     [
+      "Felpa Verde",
+      0.846,
+      true
+     ],
+     [
+      "Felpa Verde Esmeralda",
+      0.846,
+      true
+     ],
+     [
+      "Lino Tokio Gris Medio",
+      0.846,
+      true
+     ],
+     [
+      "Chinche  envejecido liso",
+      0.846,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "relleno para el asiento de una silla",
+    "top": [
+     [
+      "Reten Rodillo Zincado",
+      0.822,
+      false
+     ],
+     [
+      "Reten Rodillo Envejecido",
+      0.821,
+      false
+     ],
+     [
+      "Polilona Roja con Rallas",
+      0.819,
+      false
+     ],
+     [
+      "Lija Papel Redonda 4 1/2 pulg G 80 amarilla",
+      0.818,
+      false
+     ],
+     [
+      "Lino Andromeda Repelente Palo Rosa",
+      0.818,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo para pintar una reja de fierro que no se oxide",
+    "top": [
+     [
+      "Reten Rodillo Bronceado",
+      0.849,
+      false
+     ],
+     [
+      "Lubricante Alternativo",
+      0.844,
+      false
+     ],
+     [
+      "Reten Rodillo Zincado",
+      0.842,
+      false
+     ],
+     [
+      "Lija Pliego Fierro G 80",
+      0.841,
+      false
+     ],
+     [
+      "Pintura Spray Roja",
+      0.84,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tornillos para colgar planchas de yeso cartón",
+    "top": [
+     [
+      "Cuchillo Cartonero JCTOP",
+      0.851,
+      false
+     ],
+     [
+      "Hoja Cuchillo Cartonero (10 pcs )",
+      0.849,
+      false
+     ],
+     [
+      "Cuchillo Cartonero Trupper",
+      0.848,
+      false
+     ],
+     [
+      "Hoja Cuchillo Cartonero Trupper",
+      0.844,
+      false
+     ],
+     [
+      "Tornillo crs 6x2 Zincado x caja 10000 und",
+      0.841,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tarugos pal concreto",
+    "top": [
+     [
+      "Tarugo Clavo 8.0x100",
+      0.835,
+      true
+     ],
+     [
+      "Pu eco Crudo",
+      0.835,
+      false
+     ],
+     [
+      "Tarugo Clavo 8.0x60",
+      0.83,
+      true
+     ],
+     [
+      "Tarugo Clavo 6.0x60",
+      0.829,
+      true
+     ],
+     [
+      "Tarugo Madera 12 mm 18 pcs",
+      0.828,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "huincha pa medir",
+    "top": [
+     [
+      "Huincha Medir 10 mts toro negro",
+      0.858,
+      true
+     ],
+     [
+      "Huincha Medir 3 mts toro negro",
+      0.857,
+      true
+     ],
+     [
+      "Huincha Medir 7 mts toro negro",
+      0.856,
+      true
+     ],
+     [
+      "Huincha Medir 5 mts toro negro",
+      0.856,
+      true
+     ],
+     [
+      "Huincha Tapicera Verde por metro",
+      0.84,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa tapar goteras",
+    "top": [
+     [
+      "Fraguador Goma",
+      0.849,
+      false
+     ],
+     [
+      "Tope Puerta",
+      0.848,
+      false
+     ],
+     [
+      "Lubricante Alternativo",
+      0.845,
+      false
+     ],
+     [
+      "Tira Tachas Dorada",
+      0.844,
+      false
+     ],
+     [
+      "Llave Gasfiter",
+      0.844,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pegamento de contacto para cuero y goma",
+    "top": [
+     [
+      "Fraguador Goma",
+      0.833,
+      false
+     ],
+     [
+      "Afix Super Contact 1/32",
+      0.832,
+      true
+     ],
+     [
+      "Pegamento Parche Bicicleta",
+      0.831,
+      false
+     ],
+     [
+      "Afix Super Contact 1/16",
+      0.83,
+      true
+     ],
+     [
+      "Cinta Doble Contacto 2 und",
+      0.83,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "cinta de papel para pintar sin manchar",
+    "top": [
+     [
+      "Tijera Pin",
+      0.83,
+      false
+     ],
+     [
+      "Cinta Embalaje Transparente",
+      0.829,
+      false
+     ],
+     [
+      "Pata Chica con Vastago",
+      0.828,
+      false
+     ],
+     [
+      "pu eco Cafe con manchas",
+      0.828,
+      false
+     ],
+     [
+      "Esmalte agua negro gl sherwin williams",
+      0.828,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "disco para cortar fierro con el esmeril",
+    "top": [
+     [
+      "Disco Corte 4 1/2 Krafter",
+      0.859,
+      true
+     ],
+     [
+      "Disco Diamantado Tubo 4 1/2",
+      0.854,
+      false
+     ],
+     [
+      "Disco Corte Ceramica 4 1/2 Segmentado",
+      0.853,
+      true
+     ],
+     [
+      "Disco Traslape Fierro G 80",
+      0.851,
+      false
+     ],
+     [
+      "Disco Corte Dremel",
+      0.851,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "teflón pa la llave del agua",
+    "top": [
+     [
+      "Teflon Agua 1/2",
+      0.844,
+      true
+     ],
+     [
+      "Llave Gasfiter",
+      0.829,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G2000",
+      0.827,
+      false
+     ],
+     [
+      "Teflon Gas 1/2",
+      0.826,
+      true
+     ],
+     [
+      "Llave Esmeril",
+      0.826,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "manguera pal jardín",
+    "top": [
+     [
+      "Manguera Jardin 1/2 x metro",
+      0.869,
+      true
+     ],
+     [
+      "llave jardin bola 1/2",
+      0.858,
+      false
+     ],
+     [
+      "Manguera Compresor de Aire",
+      0.851,
+      false
+     ],
+     [
+      "Manguera Gas Amarilla",
+      0.844,
+      false
+     ],
+     [
+      "Conector Manguera 1/2",
+      0.842,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pilas chicas pal control remoto",
+    "top": [
+     [
+      "Control remoto TV Samsung",
+      0.837,
+      false
+     ],
+     [
+      "Control remoto TV LG",
+      0.836,
+      false
+     ],
+     [
+      "Lino Andromeda Repelente Palo Rosa",
+      0.829,
+      false
+     ],
+     [
+      "Pila Duracell AAA",
+      0.826,
+      true
+     ],
+     [
+      "Pila Duracell AA",
+      0.824,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "enchufe para conectar varias cosas",
+    "top": [
+     [
+      "Enchufe Americano",
+      0.861,
+      false
+     ],
+     [
+      "Enchufe embutido Doble Directo 10 A lexo",
+      0.848,
+      false
+     ],
+     [
+      "Enchufe 16-10 Amp",
+      0.847,
+      false
+     ],
+     [
+      "Enchufe embutido Triple Directo 10/16 A lexo",
+      0.845,
+      true
+     ],
+     [
+      "Enchufe Hembra Lexo 10 A",
+      0.844,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "diluyente para limpiar las brochas",
+    "top": [
+     [
+      "Diluyente Duco 1 litro",
+      0.834,
+      true
+     ],
+     [
+      "Diluyente Duco Granel 1 litro",
+      0.833,
+      true
+     ],
+     [
+      "Diluyente Duco 5 litros",
+      0.828,
+      true
+     ],
+     [
+      "Desoxidante 1 litro",
+      0.826,
+      false
+     ],
+     [
+      "Diluyente Poliuretano 1 L",
+      0.822,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "rodillo para pintar la muralla",
+    "top": [
+     [
+      "Tinta kromatin Roble  1 litro",
+      0.835,
+      false
+     ],
+     [
+      "Reten Rodillo Bronceado",
+      0.835,
+      true
+     ],
+     [
+      "Barniz Roble  1/4 gl Sayerlack",
+      0.833,
+      false
+     ],
+     [
+      "Barniz Roble 1 gl Sayerlack",
+      0.832,
+      false
+     ],
+     [
+      "Reten Rodillo Zincado",
+      0.832,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "bisagra para la puerta del mueble",
+    "top": [
+     [
+      "Bisagra Recta 35 mm Cierre Suave",
+      0.848,
+      true
+     ],
+     [
+      "Bisagra Zapatero 3 filas PAR",
+      0.842,
+      true
+     ],
+     [
+      "Soporte Barra U Blanco",
+      0.842,
+      false
+     ],
+     [
+      "Soporte Repisa Fijo Blanco",
+      0.839,
+      false
+     ],
+     [
+      "Soporte Repisa Fijo Beige",
+      0.837,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tirador para el cajón",
+    "top": [
+     [
+      "Tirador Cajon Chico",
+      0.846,
+      true
+     ],
+     [
+      "Tirador cajon struco",
+      0.843,
+      true
+     ],
+     [
+      "Tirador Concha plateado",
+      0.836,
+      true
+     ],
+     [
+      "Tirador Concha Negro",
+      0.833,
+      true
+     ],
+     [
+      "Tirador puerta Chico",
+      0.832,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "pistón a gas para mueble",
+    "top": [
+     [
+      "Piston Gas 60 N",
+      0.855,
+      true
+     ],
+     [
+      "Piston Gas 80 N",
+      0.854,
+      true
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.854,
+      false
+     ],
+     [
+      "Regulador Gas para manguera",
+      0.849,
+      false
+     ],
+     [
+      "Llave Gasfiter",
+      0.846,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "clavos para pegar en concreto",
+    "top": [
+     [
+      "Pasacable Gris Claro",
+      0.827,
+      false
+     ],
+     [
+      "Patin Clavo negro",
+      0.826,
+      false
+     ],
+     [
+      "Broca concreto 6 mm jaque",
+      0.826,
+      false
+     ],
+     [
+      "Pegamento Parche Bicicleta",
+      0.825,
+      false
+     ],
+     [
+      "Guante Cabritilla",
+      0.824,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "lija para madera",
+    "top": [
+     [
+      "Lija madera x metro G 50",
+      0.859,
+      true
+     ],
+     [
+      "Lija madera x metro G 100",
+      0.853,
+      true
+     ],
+     [
+      "Lija madera x metro G 60",
+      0.852,
+      true
+     ],
+     [
+      "Lija madera x metro G 120",
+      0.85,
+      true
+     ],
+     [
+      "Lija madera x metro G 40",
+      0.848,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "guantes pa trabajar",
+    "top": [
+     [
+      "Fraguador Goma",
+      0.838,
+      false
+     ],
+     [
+      "Gabana Gris Medio",
+      0.835,
+      false
+     ],
+     [
+      "Careta Facial",
+      0.834,
+      false
+     ],
+     [
+      "Llave Gasfiter",
+      0.834,
+      false
+     ],
+     [
+      "Punta Philips Trupper",
+      0.833,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "silicona para el baño que no le salgan hongos",
+    "top": [
+     [
+      "Silicona Acetica c/fungicida blanca",
+      0.843,
+      true
+     ],
+     [
+      "Silicona Acetica c/fungicida Transparente",
+      0.841,
+      true
+     ],
+     [
+      "Polilona Lisa Beige",
+      0.836,
+      false
+     ],
+     [
+      "Polilona Lisa Verde Botella",
+      0.834,
+      false
+     ],
+     [
+      "Polilona Lisa Negro",
+      0.833,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ácido pa limpiar la cerámica",
+    "top": [
+     [
+      "Acido Muriatico 1 Litro",
+      0.829,
+      true
+     ],
+     [
+      "Acido Muriatico 5 Litros",
+      0.829,
+      true
+     ],
+     [
+      "Silicona Acetica c/fungicida blanca",
+      0.825,
+      false
+     ],
+     [
+      "Lino Andromeda Repelente Crudo",
+      0.825,
+      false
+     ],
+     [
+      "Aceite Impregnante 5 lts",
+      0.825,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "flexible para la ducha",
+    "top": [
+     [
+      "Flexible ducha 1.5 mts",
+      0.852,
+      true
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.842,
+      false
+     ],
+     [
+      "Soporte ducha Negro",
+      0.832,
+      false
+     ],
+     [
+      "Lija Esponja Doble Fino",
+      0.824,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G2000",
+      0.823,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ruedas para mover un mueble",
+    "top": [
+     [
+      "Rueda Giratoria 2 pulg negra unidad",
+      0.858,
+      true
+     ],
+     [
+      "Rueda Giratoria 1 negra unidad",
+      0.856,
+      true
+     ],
+     [
+      "Rueda Giratoria 4 negra unidad",
+      0.856,
+      true
+     ],
+     [
+      "Rueda Giratoria 1 1,5 unidad",
+      0.855,
+      true
+     ],
+     [
+      "Rueda Giratoria 3 negra unidad",
+      0.853,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "espuma para hacer cojines",
+    "top": [
+     [
+      "Espuma 21/2 cm",
+      0.843,
+      true
+     ],
+     [
+      "Espuma D10/5 CM",
+      0.842,
+      true
+     ],
+     [
+      "Espuma 21/1 cm",
+      0.841,
+      true
+     ],
+     [
+      "Espuma Densidad 21 /12 cm (Verde)",
+      0.841,
+      true
+     ],
+     [
+      "Espuma Densidad 21 /13 cm (Verde)",
+      0.84,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "llave para apretar tuercas",
+    "top": [
+     [
+      "Tirador puerta struco",
+      0.832,
+      false
+     ],
+     [
+      "llave punta corona 9 mm",
+      0.832,
+      true
+     ],
+     [
+      "Lubricante Alternativo",
+      0.832,
+      false
+     ],
+     [
+      "amarra cable pequeña",
+      0.831,
+      false
+     ],
+     [
+      "llave punta corona 14 mm",
+      0.831,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa ponerle candado al portón",
+    "top": [
+     [
+      "Reten Rodillo Zincado",
+      0.856,
+      false
+     ],
+     [
+      "Reten Rodillo Bronceado",
+      0.851,
+      false
+     ],
+     [
+      "amarra cable pequeña",
+      0.849,
+      false
+     ],
+     [
+      "Tope Puerta",
+      0.849,
+      false
+     ],
+     [
+      "Reten Rodillo Envejecido",
+      0.846,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "botones para tapizar un respaldo",
+    "top": [
+     [
+      "matriz forrar botones 20 mm",
+      0.853,
+      true
+     ],
+     [
+      "matriz forrar botones 22 mm",
+      0.851,
+      true
+     ],
+     [
+      "matriz forrar botones 18 mm",
+      0.851,
+      true
+     ],
+     [
+      "Lino Boucle",
+      0.835,
+      false
+     ],
+     [
+      "Boton Lata N°22",
+      0.832,
+      true
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "modelo": "bge-m3",
+  "dimensiones": 1024,
+  "acierto_5": 0.733,
+  "precision_5": 0.4,
+  "mrr": 0.631,
+  "latencia_consulta_ms_p50": 2112,
+  "segundos_vectorizar_catalogo": 154.1,
+  "detalle": [
+   {
+    "consulta": "tela resistente para tapizar un sillón",
+    "top": [
+     [
+      "Felpa verde menta",
+      0.56,
+      true
+     ],
+     [
+      "Diegoti beige repelente",
+      0.556,
+      false
+     ],
+     [
+      "Tiza",
+      0.552,
+      false
+     ],
+     [
+      "Felpa estampada repelente beige",
+      0.552,
+      true
+     ],
+     [
+      "Felpa estampada repelente Gris",
+      0.541,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "relleno para el asiento de una silla",
+    "top": [
+     [
+      "Escuadra silla 25x25",
+      0.531,
+      false
+     ],
+     [
+      "Escuadra Silla 100x100",
+      0.515,
+      false
+     ],
+     [
+      "Soporte Repisa Transparente",
+      0.512,
+      false
+     ],
+     [
+      "Riel Verdulero Plastico (100 und)",
+      0.51,
+      false
+     ],
+     [
+      "Soporte Repisa Fijo Beige",
+      0.508,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo para pintar una reja de fierro que no se oxide",
+    "top": [
+     [
+      "Spray Laca Brillante",
+      0.554,
+      false
+     ],
+     [
+      "Sobrelente transparente",
+      0.55,
+      false
+     ],
+     [
+      "Lubricante Alternativo",
+      0.539,
+      false
+     ],
+     [
+      "Pintura Spray Roja",
+      0.537,
+      false
+     ],
+     [
+      "Reten Rodillo Zincado",
+      0.522,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tornillos para colgar planchas de yeso cartón",
+    "top": [
+     [
+      "Tornillo crs 6x1 1/4 Zincado x caja 100 und",
+      0.543,
+      false
+     ],
+     [
+      "Tornillo crs 6x1 5/8 Zincado x caja 100 und",
+      0.534,
+      false
+     ],
+     [
+      "Tornillo crs 6x2 Zincado x caja 100 und",
+      0.533,
+      false
+     ],
+     [
+      "Tornillo crs 6x1 Zincado x caja 100 und",
+      0.526,
+      false
+     ],
+     [
+      "Tornillo crs 6x2 Zincado x caja 10000 und",
+      0.526,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tarugos pal concreto",
+    "top": [
+     [
+      "Tarugo 8 mm",
+      0.575,
+      true
+     ],
+     [
+      "Tarugo Madera 12 mm 18 pcs",
+      0.571,
+      true
+     ],
+     [
+      "Tarugo 10 mm",
+      0.566,
+      true
+     ],
+     [
+      "Tarugo Madera 8 mm 50 pcs",
+      0.559,
+      true
+     ],
+     [
+      "Tarugo Madera 10 mm 25 pcs",
+      0.559,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "huincha pa medir",
+    "top": [
+     [
+      "Huincha Tapicera Verde por metro",
+      0.618,
+      false
+     ],
+     [
+      "Huincha Medir 7 mts toro negro",
+      0.587,
+      true
+     ],
+     [
+      "Huincha Medir 3 mts toro negro",
+      0.586,
+      true
+     ],
+     [
+      "Huincha Medir 5 mts toro negro",
+      0.574,
+      true
+     ],
+     [
+      "Huincha Medir 10 mts toro negro",
+      0.572,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa tapar goteras",
+    "top": [
+     [
+      "Sobrelente transparente",
+      0.549,
+      false
+     ],
+     [
+      "Soporte Repisa Transparente",
+      0.538,
+      false
+     ],
+     [
+      "Soporte ducha Negro",
+      0.532,
+      false
+     ],
+     [
+      "Llave Gasfiter",
+      0.532,
+      false
+     ],
+     [
+      "Cierre gris x metro",
+      0.531,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pegamento de contacto para cuero y goma",
+    "top": [
+     [
+      "Afix Super Contact 1/16",
+      0.581,
+      true
+     ],
+     [
+      "Afix Super Contact 1/4 gl",
+      0.577,
+      true
+     ],
+     [
+      "Cinta Doble Contacto 2 und",
+      0.575,
+      true
+     ],
+     [
+      "Pegamento Parche Bicicleta",
+      0.564,
+      false
+     ],
+     [
+      "Afix Super Contact 1 gl",
+      0.564,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "cinta de papel para pintar sin manchar",
+    "top": [
+     [
+      "Brocha 3 pulg",
+      0.536,
+      false
+     ],
+     [
+      "Spray Laca Brillante",
+      0.531,
+      false
+     ],
+     [
+      "Brocha 1 pulg",
+      0.531,
+      false
+     ],
+     [
+      "Brocha 1 1/2 pulg",
+      0.529,
+      false
+     ],
+     [
+      "Brocha 4 pulg",
+      0.523,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "disco para cortar fierro con el esmeril",
+    "top": [
+     [
+      "Disco Corte Dremel",
+      0.591,
+      true
+     ],
+     [
+      "Llave Esmeril",
+      0.573,
+      false
+     ],
+     [
+      "Disco lija redondo 5x8 Amarillo G150",
+      0.538,
+      false
+     ],
+     [
+      "Esmeril Angular 4 1/2 710 w",
+      0.528,
+      false
+     ],
+     [
+      "Disco Corte 4 1/2x3 mm",
+      0.527,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "teflón pa la llave del agua",
+    "top": [
+     [
+      "Teflon Agua 1/2",
+      0.57,
+      true
+     ],
+     [
+      "Llave Esmeril",
+      0.545,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G240",
+      0.529,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G500",
+      0.526,
+      false
+     ],
+     [
+      "Tornillo Drywall 6x1 5/8 p/f (100 und)",
+      0.524,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "manguera pal jardín",
+    "top": [
+     [
+      "Manguera Jardin 1/2 x metro",
+      0.622,
+      true
+     ],
+     [
+      "Manguera Compresor de Aire",
+      0.557,
+      false
+     ],
+     [
+      "Regulador Gas para manguera",
+      0.525,
+      false
+     ],
+     [
+      "Manguera Gas Amarilla",
+      0.523,
+      false
+     ],
+     [
+      "Manguera descarga lavadora 2 mts",
+      0.522,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "pilas chicas pal control remoto",
+    "top": [
+     [
+      "Control remoto TV LG",
+      0.505,
+      false
+     ],
+     [
+      "Pistola Silicona 40w",
+      0.49,
+      false
+     ],
+     [
+      "Control remoto TV Samsung",
+      0.489,
+      false
+     ],
+     [
+      "Pistola Silicona Pate",
+      0.482,
+      false
+     ],
+     [
+      "Tirador puerta Chico",
+      0.479,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "enchufe para conectar varias cosas",
+    "top": [
+     [
+      "Enchufe Americano",
+      0.692,
+      false
+     ],
+     [
+      "amarra cable pequeña",
+      0.65,
+      false
+     ],
+     [
+      "Enchufe embutido Doble Directo 10 A lexo",
+      0.593,
+      false
+     ],
+     [
+      "Enchufe embutido Triple Directo 10/16 A lexo",
+      0.583,
+      true
+     ],
+     [
+      "Enchufe 16-10 Amp",
+      0.58,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "diluyente para limpiar las brochas",
+    "top": [
+     [
+      "Brocha 2 pulg",
+      0.568,
+      false
+     ],
+     [
+      "Brocha 3 pulg",
+      0.563,
+      false
+     ],
+     [
+      "Brocha 1 pulg",
+      0.551,
+      false
+     ],
+     [
+      "Brocha 4 pulg",
+      0.537,
+      false
+     ],
+     [
+      "Brocha 1 1/2 pulg",
+      0.52,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "rodillo para pintar la muralla",
+    "top": [
+     [
+      "Tirador puerta struco",
+      0.531,
+      false
+     ],
+     [
+      "Spray Laca Brillante",
+      0.518,
+      false
+     ],
+     [
+      "Reten Rodillo Zincado",
+      0.513,
+      true
+     ],
+     [
+      "Reten Rodillo Envejecido",
+      0.51,
+      true
+     ],
+     [
+      "Escobilla con mango",
+      0.506,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "bisagra para la puerta del mueble",
+    "top": [
+     [
+      "Bisagra Cama Baul",
+      0.62,
+      true
+     ],
+     [
+      "Bisagra Recta 35 mm Cierre Suave",
+      0.62,
+      true
+     ],
+     [
+      "Bisagra Zapatero 3 filas PAR",
+      0.597,
+      true
+     ],
+     [
+      "Bisagra semicurva 35 mm Cierre Suave und",
+      0.582,
+      true
+     ],
+     [
+      "Tapilla Buga Par",
+      0.552,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "tirador para el cajón",
+    "top": [
+     [
+      "Tirador Diamante",
+      0.575,
+      true
+     ],
+     [
+      "Tirador cajon struco",
+      0.574,
+      true
+     ],
+     [
+      "Tirador puerta struco",
+      0.562,
+      true
+     ],
+     [
+      "Tirador Concha Negro",
+      0.554,
+      true
+     ],
+     [
+      "Tirador Cajon Chico",
+      0.552,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "pistón a gas para mueble",
+    "top": [
+     [
+      "Piston Gas 60 N",
+      0.637,
+      true
+     ],
+     [
+      "Piston Gas 80 N",
+      0.606,
+      true
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.552,
+      false
+     ],
+     [
+      "Pata Plastica Michelin",
+      0.512,
+      false
+     ],
+     [
+      "Lija Pliego al Agua G1500",
+      0.507,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "clavos para pegar en concreto",
+    "top": [
+     [
+      "Broca concreto 6 mm jaque",
+      0.583,
+      false
+     ],
+     [
+      "Clavo rollo 2 pulg",
+      0.548,
+      false
+     ],
+     [
+      "Patin clavo negro bolsa 200 und",
+      0.547,
+      false
+     ],
+     [
+      "Broca Concreto 10 mm Jaque",
+      0.544,
+      false
+     ],
+     [
+      "Patin Nylon 23 mm Café con clavo",
+      0.538,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "lija para madera",
+    "top": [
+     [
+      "Lija madera x metro G 100",
+      0.659,
+      true
+     ],
+     [
+      "Lija madera x metro G 40",
+      0.656,
+      true
+     ],
+     [
+      "Lija madera x metro G 80",
+      0.652,
+      true
+     ],
+     [
+      "Lija madera x metro G 60",
+      0.652,
+      true
+     ],
+     [
+      "Lija madera x metro G 180",
+      0.652,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "guantes pa trabajar",
+    "top": [
+     [
+      "Guante Negro PU",
+      0.55,
+      true
+     ],
+     [
+      "Llave Gasfiter",
+      0.523,
+      false
+     ],
+     [
+      "amarra cable pequeña",
+      0.52,
+      false
+     ],
+     [
+      "Escobilla con mango",
+      0.517,
+      false
+     ],
+     [
+      "Espatula  1 1/2",
+      0.512,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "silicona para el baño que no le salgan hongos",
+    "top": [
+     [
+      "Silicona Acetica c/fungicida Transparente",
+      0.484,
+      true
+     ],
+     [
+      "Silicona Neutra Titanio 280 ml",
+      0.482,
+      false
+     ],
+     [
+      "Silicona Liquida 100 ml",
+      0.48,
+      false
+     ],
+     [
+      "Silicona Acetica c/fungicida blanca",
+      0.474,
+      true
+     ],
+     [
+      "Silicona Neutra Gris 280 ml",
+      0.457,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ácido pa limpiar la cerámica",
+    "top": [
+     [
+      "Acido Muriatico 5 Litros",
+      0.481,
+      true
+     ],
+     [
+      "Acido Muriatico 1 Litro",
+      0.473,
+      true
+     ],
+     [
+      "Concentrado Azul 100 cc",
+      0.472,
+      false
+     ],
+     [
+      "Concentrado Amarillo 100 cc",
+      0.467,
+      false
+     ],
+     [
+      "Soda Caústica 1/2 kilo",
+      0.458,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "flexible para la ducha",
+    "top": [
+     [
+      "Flexible ducha 1.5 mts",
+      0.728,
+      true
+     ],
+     [
+      "Flexible Lavadora 2 mts",
+      0.615,
+      false
+     ],
+     [
+      "Regulador gas para Flexible",
+      0.59,
+      false
+     ],
+     [
+      "Set ducha 3 pcs",
+      0.575,
+      false
+     ],
+     [
+      "Flexible Gas 1/2x3/8 1 mt",
+      0.545,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "ruedas para mover un mueble",
+    "top": [
+     [
+      "Rueda Giratoria 1 1,5 unidad",
+      0.609,
+      true
+     ],
+     [
+      "Patin regulable cafe con tuerca",
+      0.607,
+      false
+     ],
+     [
+      "Reten Rodillo Envejecido",
+      0.604,
+      false
+     ],
+     [
+      "Rueda Fija 1 1/2",
+      0.586,
+      true
+     ],
+     [
+      "Rueda Giratoria 1 negra unidad",
+      0.572,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "espuma para hacer cojines",
+    "top": [
+     [
+      "espuma 25/10 cm",
+      0.63,
+      true
+     ],
+     [
+      "espuma 25/5 cm",
+      0.621,
+      true
+     ],
+     [
+      "Espuma 25/2 cm",
+      0.614,
+      true
+     ],
+     [
+      "Espuma 21/1 cm",
+      0.611,
+      true
+     ],
+     [
+      "Espuma D12/1 cm",
+      0.607,
+      true
+     ]
+    ]
+   },
+   {
+    "consulta": "llave para apretar tuercas",
+    "top": [
+     [
+      "Llave Esmeril",
+      0.548,
+      false
+     ],
+     [
+      "Tuerca Anclaje 5/16",
+      0.544,
+      false
+     ],
+     [
+      "llave punta corona 13 mm",
+      0.531,
+      true
+     ],
+     [
+      "llave punta corona 7 mm",
+      0.526,
+      true
+     ],
+     [
+      "Patin regulable cafe con tuerca",
+      0.525,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "algo pa ponerle candado al portón",
+    "top": [
+     [
+      "amarra cable pequeña",
+      0.589,
+      false
+     ],
+     [
+      "Portacandado 3.5 mm",
+      0.582,
+      true
+     ],
+     [
+      "Maquina Forrar Botones",
+      0.579,
+      false
+     ],
+     [
+      "Tope Puerta",
+      0.575,
+      false
+     ],
+     [
+      "llave punta corona 6 mm",
+      0.568,
+      false
+     ]
+    ]
+   },
+   {
+    "consulta": "botones para tapizar un respaldo",
+    "top": [
+     [
+      "matriz forrar botones 22 mm",
+      0.622,
+      true
+     ],
+     [
+      "matriz forrar botones 20 mm",
+      0.604,
+      true
+     ],
+     [
+      "matriz forrar botones 18 mm",
+      0.597,
+      true
+     ],
+     [
+      "Maquina Forrar Botones",
+      0.571,
+      true
+     ],
+     [
+      "pu eco White",
+      0.549,
+      false
+     ]
+    ]
+   }
+  ]
+ }
+]
