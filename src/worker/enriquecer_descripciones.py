@@ -2,12 +2,19 @@
 
     python enriquecer_descripciones.py            # solo productos sin descripción
     python enriquecer_descripciones.py --limite 50
+    python enriquecer_descripciones.py --curadas  # reescribe con las descripciones revisadas a mano
+    python enriquecer_descripciones.py --informe  # muestra qué productos no tienen descripción revisada
 
-Es la única tarea en que AgenTech usa un modelo de lenguaje sobre el catálogo: escribir, a partir del
-nombre y la categoría, para qué sirve el producto y cómo lo pide un cliente chileno. Así la búsqueda
-semántica entiende "pa tapar goteras" o "tarugos pal concreto". No inventa precios, stock ni medidas:
-esos datos vienen siempre de la base. Al cambiar la descripción, el trigger de productos lo deja
-pendiente y vectorizar.py lo vuelve a vectorizar.
+La descripción dice para qué sirve el producto y cómo lo pide un cliente chileno. Así la búsqueda
+semántica entiende "pa tapar goteras" o "tarugos pal concreto". Sale de dos fuentes:
+
+1. tipos_producto.py: descripciones revisadas a mano por tipo de producto. Siempre se prefieren.
+2. Un modelo de lenguaje local, solo para los productos que no calzan con ningún tipo. Es la única
+   tarea en que AgenTech usa un modelo de lenguaje sobre el catálogo, y se equivoca con nombres cortos
+   o ambiguos: lo que escriba conviene revisarlo y pasarlo a tipos_producto.py.
+
+No inventa precios, stock ni medidas: esos datos vienen siempre de la base. Al cambiar la descripción,
+el trigger de productos lo deja pendiente y vectorizar.py lo vuelve a vectorizar.
 """
 
 import argparse
@@ -16,6 +23,7 @@ import os
 import time
 import urllib.request
 
+from tipos_producto import descripcion_curada, por_confirmar
 from vectorizar import cargar_env, conexion
 
 LOTE = 10
@@ -48,11 +56,43 @@ def describir(lote, modelo, url):
     return {sku: " ".join(str(texto).split())[:400] for sku, texto in datos.items() if sku in skus and str(texto).strip()}
 
 
+def aplicar_curadas(solo_informe=False):
+    """Pone la descripción revisada a todo producto activo que calce con un tipo. Informa lo que queda fuera."""
+    with conexion() as con:
+        productos = con.execute(
+            """SELECT p.sku, p.nombre, c.nombre, p.descripcion, p.stock > 0
+               FROM productos p LEFT JOIN categorias c ON c.id = p.categoria_id
+               WHERE p.activo ORDER BY c.nombre, p.nombre""").fetchall()
+        cambios = [(descripcion_curada(nombre), sku) for sku, nombre, _, actual, _ in productos
+                   if descripcion_curada(nombre) and descripcion_curada(nombre) != actual]
+        sin_tipo = [(categoria, nombre) for _, nombre, categoria, _, _ in productos if not descripcion_curada(nombre)]
+        dudosos = sorted({nombre for _, nombre, _, _, _ in productos if por_confirmar(nombre)})
+        print(f"{len(productos)} productos activos: {len(productos) - len(sin_tipo)} con descripción revisada, "
+              f"{len(sin_tipo)} sin tipo (quedan con la del modelo), {len(cambios)} por reescribir.")
+        if sin_tipo:
+            print("Sin tipo en tipos_producto.py:")
+            for categoria, nombre in sin_tipo:
+                print(f"  {categoria or 'Sin categoría'} | {nombre}")
+        if dudosos:
+            print("Por confirmar con la ferretería: " + "; ".join(dudosos))
+        if solo_informe or not cambios:
+            return
+        con.cursor().executemany("UPDATE productos SET descripcion = %s WHERE sku = %s", cambios)
+        con.commit()
+        print(f"Listo: {len(cambios)} descripciones reescritas. Ahora corre vectorizar.py para actualizar los vectores.")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--limite", type=int, default=0, help="máximo de productos (0 = todos los pendientes)")
+    ap.add_argument("--curadas", action="store_true",
+                    help="reescribe la descripción de todo producto que calce con tipos_producto.py")
+    ap.add_argument("--informe", action="store_true", help="solo muestra la cobertura de tipos_producto.py")
     args = ap.parse_args()
     cargar_env()
+    if args.curadas or args.informe:
+        aplicar_curadas(solo_informe=args.informe)
+        return
     modelo = os.environ.get("ENRICH_MODEL") or os.environ.get("AGENT_MODEL", "qwen2.5:7b")
     url = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
 
@@ -60,6 +100,13 @@ def main():
         pendientes = con.execute(
             """SELECT p.sku, p.nombre, c.nombre FROM productos p LEFT JOIN categorias c ON c.id = p.categoria_id
                WHERE p.activo AND (p.descripcion IS NULL OR p.descripcion = '') ORDER BY p.id""").fetchall()
+        # Primero las descripciones revisadas a mano; el modelo solo ve lo que no calza con ningún tipo.
+        curadas = [(descripcion_curada(nombre), sku) for sku, nombre, _ in pendientes if descripcion_curada(nombre)]
+        if curadas:
+            con.cursor().executemany("UPDATE productos SET descripcion = %s WHERE sku = %s", curadas)
+            con.commit()
+            print(f"{len(curadas)} productos con descripción revisada (tipos_producto.py)")
+        pendientes = [p for p in pendientes if not descripcion_curada(p[1])]
         if args.limite:
             pendientes = pendientes[:args.limite]
         print(f"{len(pendientes)} productos sin descripción; modelo {modelo}")

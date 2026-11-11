@@ -4,6 +4,7 @@ Bsale se usa SOLO EN LECTURA: este script hace únicamente pedidos GET.
 
     python sincronizar_bsale.py catalogo   # precio (lista 4 con IVA) y stock disponible -> POST /ingesta
     python sincronizar_bsale.py ventas     # boletas, facturas y notas de crédito -> tablas ventas y venta_detalle
+    python sincronizar_bsale.py recepciones  # entradas de mercadería a bodega -> tabla recepciones_stock
     python sincronizar_bsale.py todo
 
 El token se lee de BSALE_ACCESS_TOKEN (src/.env o el archivo que indique --env). Nunca se imprime.
@@ -211,6 +212,40 @@ def sincronizar_ventas(con, meses):
     return guardados
 
 
+# ---------------------------------------------------------------- recepciones de stock
+
+def sincronizar_recepciones(con):
+    """Entradas de mercadería a bodega: dicen cuándo se compró cada producto por última vez."""
+    print("Leyendo recepciones de stock de Bsale (solo GET)")
+    recepciones = todo_paginado("stocks/receptions.json", {"expand": "[details]"})
+    variantes = dict(con.execute(
+        "SELECT bsale_variante_id, id FROM productos WHERE bsale_variante_id IS NOT NULL").fetchall())
+    lineas = 0
+    with con.cursor() as cur:
+        for r in recepciones:
+            if not r.get("admissionDate"):
+                continue
+            recibido = datetime.fromtimestamp(r["admissionDate"], timezone.utc).date()
+            items = (r.get("details") or {}).get("items") or []
+            if len(items) < (r.get("details") or {}).get("count", 0):
+                items = todo_paginado(f"stocks/receptions/{r['id']}/details.json")
+            for it in items:
+                vid = ref(it.get("variant"))
+                cur.execute(
+                    """INSERT INTO recepciones_stock (id, recepcion_id, recibido_en, sucursal_id, bsale_variante_id,
+                                                      producto_id, cantidad, costo)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                       ON CONFLICT (id) DO UPDATE SET recibido_en = EXCLUDED.recibido_en, cantidad = EXCLUDED.cantidad,
+                                                      costo = EXCLUDED.costo, producto_id = EXCLUDED.producto_id,
+                                                      sincronizado_en = now()""",
+                    (it["id"], r["id"], recibido, ref(r.get("office")), vid, variantes.get(vid),
+                     it.get("quantity") or 0, it.get("cost")))
+                lineas += 1
+    con.commit()
+    print(f"{lineas} líneas de recepción guardadas ({len(recepciones)} recepciones leídas)")
+    return lineas
+
+
 def registrar(con, recurso, funcion):
     sid = con.execute("INSERT INTO sincronizaciones_bsale (recurso) VALUES (%s) RETURNING id", (recurso,)).fetchone()[0]
     con.commit()
@@ -229,7 +264,7 @@ def registrar(con, recurso, funcion):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("que", choices=["catalogo", "ventas", "todo"])
+    ap.add_argument("que", choices=["catalogo", "ventas", "recepciones", "todo"])
     ap.add_argument("--env", type=Path, help="archivo .env adicional con BSALE_ACCESS_TOKEN")
     ap.add_argument("--desde", type=Path, help="carpeta con los JSON ya descargados de Bsale (solo catálogo)")
     ap.add_argument("--api", default=os.environ.get("AGENTECH_API", "http://localhost:3000"))
@@ -245,6 +280,8 @@ def main():
             registrar(con, "catalogo", lambda: sincronizar_catalogo(args.desde, args.api))
         if args.que in ("ventas", "todo"):
             registrar(con, "ventas", lambda: sincronizar_ventas(con, args.meses))
+        if args.que in ("recepciones", "todo"):
+            registrar(con, "recepciones", lambda: sincronizar_recepciones(con))
 
 
 if __name__ == "__main__":

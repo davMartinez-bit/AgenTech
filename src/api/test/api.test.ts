@@ -5,6 +5,7 @@ import type { AddressInfo } from "node:net";
 import { after, before, describe, test } from "node:test";
 import { pool } from "../src/db.js";
 import { hechos } from "../src/rutas/admin.js";
+import { cifrasInventadas, clasificar } from "../src/rutas/alertas.js";
 import { app } from "../src/server.js";
 
 let base = "";
@@ -92,6 +93,35 @@ describe("POST /consulta", () => {
     assert.deepEqual(datos.resultados, []);
   });
 
+  test("entiende el nombre que usa el cliente y la escritura informal", async () => {
+    for (const texto of ["huincha aislante", "wincha aislante", "hola buenas, ¿tiene huinchas aislantes porfa?"]) {
+      const { datos } = await post("/consulta", { texto, limite: 3 });
+      assert.match(datos.resultados[0].nombre, /cinta aisladora/i, texto);
+      assert.equal(datos.texto, texto, "devuelve el texto tal como se escribió");
+      assert.equal(datos.texto_buscado, "cinta aisladora");
+      assert.equal(datos.se_corrigio, true);
+      const { rows } = await pool.query("SELECT texto FROM consultas WHERE id = $1", [datos.consulta_id]);
+      assert.equal(rows[0].texto, texto, "guarda el texto original, no el corregido");
+    }
+    const galletera = await post("/consulta", { texto: "galletera", limite: 3 });
+    assert.match(galletera.datos.resultados[0].nombre, /esmeril angular/i);
+    const exacta = await post("/consulta", { texto: "cinta aisladora", limite: 3 });
+    assert.equal(exacta.datos.se_corrigio, false);
+  });
+
+  test("registra el clic en un resultado y rechaza un producto que no venía en la consulta", async () => {
+    const { datos } = await post("/consulta", { texto: "huincha pa medir", limite: 5 });
+    const segundo = datos.resultados[1];
+    const clic = await post(`/consulta/${datos.consulta_id}/clic`, { sku: segundo.sku, origen: "asistente" });
+    assert.equal(clic.estado, 201);
+    assert.equal(clic.datos.posicion, 2);
+    const { rows } = await pool.query("SELECT origen FROM consulta_clics WHERE consulta_id = $1", [datos.consulta_id]);
+    assert.deepEqual(rows, [{ origen: "asistente" }]);
+    const ajeno = await post(`/consulta/${datos.consulta_id}/clic`, { sku: "NO-EXISTE" });
+    assert.equal(ajeno.estado, 404);
+    assert.equal(ajeno.datos.error.codigo, "resultado_no_encontrado");
+  });
+
   test("texto vacío es un 400 con el formato de error", async () => {
     const { estado, datos } = await post("/consulta", { texto: "   " });
     assert.equal(estado, 400);
@@ -129,5 +159,47 @@ describe("agente del panel", () => {
   test("GET /admin/graficos/:id inexistente responde 404", async () => {
     const r = await fetch(`${base}/admin/graficos/no-existe`);
     assert.equal(r.status, 404);
+  });
+});
+
+describe("avisos de inventario", () => {
+  const producto = {
+    sku: "X1", nombre: "Producto de prueba", categoria: null, precio: 1000, stock_bsale: 5, vendido_desde_corte: 0, stock_estimado: 5,
+    unidades_30: 30, unidades_30_previos: 10, unidades_90: 60, total_90: 60000, unidades_365: 100,
+    dias_sin_vender: 1, dias_sin_comprar: null,
+  };
+
+  test("avisa cuando el stock alcanza para pocos días y sugiere cuánto comprar", () => {
+    const a = clasificar(producto, false)!;
+    assert.equal(a.tipo, "por_agotarse");
+    assert.equal(a.urgencia, 1);
+    assert.equal(a.datos.dias_alcanza, 5);
+    assert.equal(a.datos.comprar, 25);
+    assert.ok(a.aviso.includes("Se está vendiendo más"));
+  });
+
+  test("distingue el agotado que se vendía, el olvidado y el stock parado", () => {
+    assert.equal(clasificar({ ...producto, stock_estimado: 0 }, false)!.tipo, "agotado_con_demanda");
+    assert.equal(
+      clasificar({ ...producto, stock_estimado: 0, unidades_30: 0, unidades_90: 0, dias_sin_vender: 150 }, false)!.tipo,
+      "agotado_olvidado",
+    );
+    const parado = { ...producto, stock_estimado: 100, unidades_30: 0, unidades_90: 0, dias_sin_vender: 200 };
+    assert.equal(clasificar(parado, false)!.tipo, "stock_parado");
+    assert.equal(clasificar({ ...parado, dias_sin_comprar: 10 }, true), null, "recién comprado no es stock parado");
+    assert.equal(clasificar({ ...producto, stock_estimado: 500 }, false), null);
+  });
+
+  test("detecta cifras que el agente inventó", () => {
+    const hechos = "quedan: 5 | vendidos en los últimos 30 días: 1.644,7 | valor: $2.936.800";
+    assert.deepEqual(cifrasInventadas("Te quedan 5 y vendiste 1.644,7 ($2.936.800).", hechos), []);
+    assert.deepEqual(cifrasInventadas("Te quedan 6.", hechos), ["6"]);
+  });
+
+  test("GET /admin/alertas entrega los avisos ordenados y con sus cuentas", async () => {
+    const d = (await (await fetch(`${base}/admin/alertas`)).json()) as any;
+    assert.ok(d.fechas.stock_leido_el);
+    assert.equal(d.alertas.filter((a: any) => a.tipo === "por_agotarse").length, Math.min(d.conteo.por_agotarse, d.reglas.porTipo));
+    assert.ok(d.alertas.every((a: any) => a.aviso && a.accion));
   });
 });

@@ -83,7 +83,11 @@ export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: 
                   </thead>
                   <tbody>
                     {m.resultado.resultados.map((p) => (
-                      <tr key={p.sku} onClick={() => abrir(p)} className="cursor-pointer border-t border-borde hover:bg-crema/50">
+                      <tr
+                        key={p.sku}
+                        onClick={() => (api.clic(m.resultado!.consulta_id, p.sku, "asistente"), abrir(p))}
+                        className="cursor-pointer border-t border-borde hover:bg-crema/50"
+                      >
                         <td className="py-1.5 pr-2">
                           <div className="font-medium leading-tight">{p.nombre}</div>
                           <div className="text-xs text-gris">SKU {p.sku}</div>

@@ -9,6 +9,7 @@ import { config } from "./config.js";
 import { pool } from "./db.js";
 import { manejarErrores } from "./errores.js";
 import { rutaAdmin } from "./rutas/admin.js";
+import { rutaAlertas } from "./rutas/alertas.js";
 import { rutaConsulta } from "./rutas/consulta.js";
 import { rutaIngesta } from "./rutas/ingesta.js";
 import { rutaProductos } from "./rutas/productos.js";
@@ -28,7 +29,7 @@ app.get("/openapi.json", (_req, res) => res.json(especificacion));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));
 if (config.fotosDir) app.use("/fotos", express.static(config.fotosDir, { maxAge: "1d" }));
 
-app.use(rutaIngesta, rutaConsulta, rutaProductos, rutaAdmin);
+app.use(rutaIngesta, rutaConsulta, rutaProductos, rutaAdmin, rutaAlertas);
 
 // Si los paneles están compilados (src/web/dist), la API también los sirve en local.
 const web = join(aqui, "..", "..", "web", "dist");
