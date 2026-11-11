@@ -14,6 +14,8 @@ export type Producto = {
 export type ResultadoConsulta = {
   consulta_id: number;
   texto: string;
+  texto_buscado: string;
+  se_corrigio: boolean;
   modelo: string;
   latencia_ms: number;
   agotado_parecido: { sku: string; nombre: string; foto: string | null } | null;
@@ -22,6 +24,38 @@ export type ResultadoConsulta = {
 
 export type Complemento = Producto & { veces_juntos: number; confianza: number };
 export type Alternativa = Producto & { similitud: number };
+
+export type TipoAlerta = "por_agotarse" | "agotado_con_demanda" | "agotado_olvidado" | "stock_parado" | "piden_y_no_hay";
+
+export type Alerta = {
+  tipo: TipoAlerta;
+  urgencia: 1 | 2 | 3;
+  sku: string | null;
+  nombre: string;
+  categoria: string | null;
+  aviso: string;
+  accion: string;
+  monto: number;
+  datos: Record<string, number | null>;
+};
+
+export type Alertas = {
+  fechas: { ventas_hasta: string | null; recepciones_hasta: string | null; stock_leido_el: string; dias_stock_viejo: number };
+  conteo: Record<TipoAlerta, number>;
+  montos: Record<TipoAlerta, number>;
+  por_agotarse_urgentes: number;
+  resumen_reglas: string;
+  alertas: Alerta[];
+};
+
+export type AvisosAgente = {
+  texto: string;
+  redactado_por: "agente" | "reglas";
+  modelo: string;
+  latencia_ms: number;
+  desde_cache: boolean;
+  motivo?: string;
+};
 
 async function pedir<T>(ruta: string, opciones?: RequestInit): Promise<T> {
   const r = await fetch(ruta, {
@@ -45,6 +79,9 @@ export const api = {
   categorias: () => pedir<{ nombre: string; productos: number; disponibles: number }[]>("/categorias"),
   consulta: (texto: string, limite = 8) =>
     pedir<ResultadoConsulta>("/consulta", { method: "POST", body: JSON.stringify({ texto, limite }) }),
+  // Avisa qué resultado se abrió. No interrumpe al vendedor si falla.
+  clic: (consultaId: number, sku: string, origen: "buscador" | "asistente") =>
+    pedir(`/consulta/${consultaId}/clic`, { method: "POST", body: JSON.stringify({ sku, origen }) }).catch(() => {}),
   resumen: () => pedir<Record<string, any>>("/admin/resumen"),
   grafico: (id: string) => pedir<{ id: string; titulo: string; descripcion: string; datos: any[] }>(`/admin/graficos/${id}`),
   interpretar: (grafico: string) =>
@@ -52,6 +89,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ grafico }),
     }),
+  alertas: () => pedir<Alertas>("/admin/alertas"),
+  avisos: () => pedir<AvisosAgente>("/admin/avisos", { method: "POST" }),
   ingestas: () => pedir<any[]>("/admin/ingestas"),
   consultas: () => pedir<any[]>("/admin/consultas"),
 };

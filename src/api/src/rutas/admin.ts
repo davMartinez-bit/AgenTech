@@ -132,7 +132,11 @@ rutaAdmin.get("/admin/consultas", async (_req, res) => {
     await consultar(
       `SELECT c.id, c.texto, c.cantidad_resultados, c.latencia_ms, c.creado_en, m.nombre AS modelo,
               (SELECT p.nombre FROM consulta_resultados r JOIN productos p ON p.id = r.producto_id
-                WHERE r.consulta_id = c.id AND r.posicion = 1) AS primer_resultado
+                WHERE r.consulta_id = c.id AND r.posicion = 1) AS primer_resultado,
+              (SELECT p.nombre || ' (' || r.posicion || '°)' FROM consulta_clics k
+                 JOIN consulta_resultados r ON r.consulta_id = k.consulta_id AND r.producto_id = k.producto_id
+                 JOIN productos p ON p.id = k.producto_id
+                WHERE k.consulta_id = c.id ORDER BY k.creado_en, k.id LIMIT 1) AS producto_abierto
        FROM consultas c JOIN modelos_embedding m ON m.id = c.modelo_id
        ORDER BY c.creado_en DESC LIMIT 30`,
     ),

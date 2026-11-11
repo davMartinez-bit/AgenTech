@@ -121,6 +121,7 @@ export function Vendedor({ salir }: { salir: () => void }) {
             </button>
           </div>
         )}
+        {semantica?.se_corrigio && <p className="mb-3 text-xs text-gris">{`Mostrando resultados para "${semantica.texto_buscado}"`}</p>}
 
         {error && <p className="mb-4 rounded-lg bg-rojo/10 px-4 py-3 text-rojo">{error}</p>}
         {cargando && <p className="py-10 text-center text-gris">Buscando…</p>}
@@ -131,7 +132,10 @@ export function Vendedor({ salir }: { salir: () => void }) {
         )}
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-          {!cargando && productos.map((p) => <Tarjeta key={p.sku} p={p} abrir={() => setFicha(p)} />)}
+          {!cargando &&
+            productos.map((p) => (
+              <Tarjeta key={p.sku} p={p} abrir={() => (semantica && api.clic(semantica.consulta_id, p.sku, "buscador"), setFicha(p))} />
+            ))}
         </div>
 
         {!semantica && paginas > 1 && (

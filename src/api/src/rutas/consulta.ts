@@ -6,9 +6,9 @@ import { ErrorApi } from "../errores.js";
 import { embeberConsulta } from "../ollama.js";
 import { urlFoto } from "./productos.js";
 
-// Historias 3 y 4: consulta en lenguaje natural + búsqueda híbrida.
-// buscar_productos_hibrida aplica el filtro duro (solo activos con stock > 0) y ordena por un puntaje
-// que combina la similitud semántica con la coincidencia de palabras del nombre.
+// Historias 3 y 4: consulta en lenguaje natural. buscar_productos_fusion combina la similitud semántica
+// con la coincidencia de texto completo. Antes de vectorizar, expandir_consulta corrige la escritura y
+// aplica sinónimos (lo que dice el cliente -> nombre en el catálogo). Solo productos activos con stock > 0.
 
 const cuerpoConsulta = z.object({
   texto: z.string().trim().min(1, "Escribe qué estás buscando").max(500),
@@ -21,6 +21,9 @@ const cuerpoConsulta = z.object({
 export type ResultadoConsulta = {
   consulta_id: number;
   texto: string;
+  // Texto con el que se buscó (ya corregido y con sinónimos) y si cambió respecto del normalizado.
+  texto_buscado: string;
+  se_corrigio: boolean;
   modelo: string;
   similitud_minima: number;
   latencia_ms: number;
@@ -39,29 +42,30 @@ export async function ejecutarConsulta(entrada: z.input<typeof cuerpoConsulta>):
   const cliente = await pool.query("SELECT id FROM clientes_api WHERE nombre = $1 AND activo", [c.cliente]);
   if (!cliente.rowCount) throw new ErrorApi(403, "cliente_desconocido", `El cliente "${c.cliente}" no está registrado.`);
 
-  const vector = comoVector(await embeberConsulta(c.texto));
+  const { rows: [{ normalizada, expandida }] } = await pool.query(
+    "SELECT normalizar_busqueda($1) AS normalizada, expandir_consulta($1) AS expandida",
+    [c.texto],
+  );
+  const vector = comoVector(await embeberConsulta(expandida));
   const { rows } = await pool.query(
     `SELECT producto_id, sku, nombre, categoria, precio, stock, similitud, puntaje
-     FROM buscar_productos_hibrida($1::vector, $2::text, $3::int, $4::real, $5::real)`,
-    [vector, c.texto, c.limite, umbral, config.pesoTexto],
+     FROM buscar_productos_fusion($1::vector, $2::text, $3::int, $4::real)`,
+    [vector, expandida, c.limite, umbral],
   );
 
   // Si lo que mejor calza con la búsqueda está agotado, se avisa para que el vendedor ofrezca
   // las alternativas con stock (que son los resultados) en vez de decir solo "no hay".
+  // Se compara por similitud semántica: los puntajes de la fusión no son comparables con este.
   const { rows: agotados } = await pool.query(
-    `WITH cercanos AS (
-       SELECT p.sku, p.nombre, (1 - (e.embedding <=> $1::vector))::real AS similitud,
-              word_similarity(lower($2::text), lower(p.nombre))::real AS sim_texto
-       FROM producto_embeddings e JOIN productos p ON p.id = e.producto_id
-       WHERE p.activo AND p.stock <= 0
-       ORDER BY e.embedding <=> $1::vector LIMIT 10)
-     SELECT sku, nombre, similitud, ((1 - $3::real) * similitud + $3::real * sim_texto)::real AS puntaje
-     FROM cercanos ORDER BY puntaje DESC LIMIT 1`,
-    [vector, c.texto, config.pesoTexto],
+    `SELECT p.sku, p.nombre, (1 - (e.embedding <=> $1::vector))::real AS similitud
+     FROM producto_embeddings e JOIN productos p ON p.id = e.producto_id
+     WHERE p.activo AND p.stock <= 0
+     ORDER BY e.embedding <=> $1::vector LIMIT 1`,
+    [vector],
   );
   const agotado = agotados[0];
   const agotadoParecido =
-    agotado && agotado.similitud >= umbral && (!rows.length || agotado.puntaje > rows[0].puntaje)
+    agotado && agotado.similitud >= umbral && (!rows.length || agotado.similitud > Math.max(...rows.map((r) => r.similitud)))
       ? { sku: agotado.sku, nombre: agotado.nombre, foto: urlFoto(agotado.sku) }
       : null;
   const latencia = Math.round(performance.now() - inicio);
@@ -85,6 +89,8 @@ export async function ejecutarConsulta(entrada: z.input<typeof cuerpoConsulta>):
   return {
     consulta_id: consultaId,
     texto: c.texto,
+    texto_buscado: expandida,
+    se_corrigio: expandida !== normalizada,
     modelo: config.modeloEmbedding,
     similitud_minima: umbral,
     latencia_ms: latencia,
@@ -105,4 +111,27 @@ export const rutaConsulta = Router();
 
 rutaConsulta.post("/consulta", async (req, res) => {
   res.json(await ejecutarConsulta(req.body));
+});
+
+// Clic en un resultado: qué producto abrió el vendedor después de buscar. Con esto se mide la búsqueda
+// con uso real (en qué posición estaba lo que se abrió). Solo vale un producto que venía en esa consulta.
+const cuerpoClic = z.object({
+  sku: z.string().trim().min(1, "Falta el SKU del producto abierto"),
+  origen: z.enum(["buscador", "asistente"]).default("buscador"),
+});
+
+rutaConsulta.post("/consulta/:id/clic", async (req, res) => {
+  const consultaId = Number(req.params.id);
+  if (!Number.isInteger(consultaId) || consultaId <= 0) throw new ErrorApi(400, "solicitud_invalida", "El id de la consulta no es válido.");
+  const c = cuerpoClic.parse(req.body);
+  const { rows } = await pool.query(
+    `INSERT INTO consulta_clics (consulta_id, producto_id, origen)
+     SELECT r.consulta_id, r.producto_id, $3
+     FROM consulta_resultados r JOIN productos p ON p.id = r.producto_id
+     WHERE r.consulta_id = $1 AND p.sku = $2
+     RETURNING (SELECT posicion FROM consulta_resultados x WHERE x.consulta_id = $1 AND x.producto_id = consulta_clics.producto_id) AS posicion`,
+    [consultaId, c.sku, c.origen],
+  );
+  if (!rows.length) throw new ErrorApi(404, "resultado_no_encontrado", "Ese producto no está entre los resultados de la consulta.");
+  res.status(201).json({ consulta_id: consultaId, sku: c.sku, posicion: rows[0].posicion });
 });

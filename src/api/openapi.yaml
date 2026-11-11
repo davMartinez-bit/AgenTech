@@ -53,9 +53,11 @@ paths:
       tags: [Consulta]
       summary: Busca productos con una frase en lenguaje natural
       description: |
-        Calcula el embedding de la frase con el mismo modelo del worker y llama a `buscar_productos`:
-        solo productos activos con stock > 0, ordenados por similitud, sobre el umbral `similitud_minima`.
-        Si nada supera el umbral, `resultados` viene vacío (no es un error).
+        Primero `expandir_consulta` corrige la escritura, quita saludos y muletillas y cambia el nombre que
+        usa el cliente por el del catálogo ("huincha aislante" pasa a "cinta aisladora"). Después calcula el
+        embedding con el mismo modelo del worker y llama a `buscar_productos_fusion`, que combina la
+        similitud semántica con el texto completo y el parecido del nombre. Solo productos activos con
+        stock > 0. Si nada calza, `resultados` viene vacío (no es un error).
       requestBody:
         required: true
         content:
@@ -74,6 +76,38 @@ paths:
           content: { application/json: { schema: { $ref: "#/components/schemas/ResultadoConsulta" } } }
         "400": { $ref: "#/components/responses/Error" }
         "503": { $ref: "#/components/responses/Error" }
+  /consulta/{id}/clic:
+    post:
+      tags: [Consulta]
+      summary: Registra qué resultado abrió el vendedor
+      description: |
+        Guarda el producto que se abrió después de una consulta, para medir la búsqueda con uso real
+        (en qué posición estaba lo que se abrió). El producto debe estar entre los resultados de esa consulta.
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer }, description: "consulta_id que devolvió POST /consulta" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sku]
+              properties:
+                sku: { type: string }
+                origen: { type: string, enum: [buscador, asistente], default: buscador }
+      responses:
+        "201":
+          description: Clic registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  consulta_id: { type: integer }
+                  sku: { type: string }
+                  posicion: { type: integer, description: "Posición del producto en los resultados (1 = primero)" }
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
   /productos:
     get:
       tags: [Catálogo]
@@ -235,6 +269,8 @@ components:
       properties:
         consulta_id: { type: integer }
         texto: { type: string }
+        texto_buscado: { type: string, description: "Texto con el que se buscó, ya corregido y con sinónimos" }
+        se_corrigio: { type: boolean, description: "Indica si el texto buscado difiere del que escribió el vendedor" }
         modelo: { type: string }
         similitud_minima: { type: number }
         latencia_ms: { type: integer }
