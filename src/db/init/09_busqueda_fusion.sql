@@ -135,6 +135,7 @@ BEGIN
 END;
 $$;
 
+-- La versión vigente está en 14_correccion_escritura.sql (agrega el corrector de escritura).
 CREATE OR REPLACE FUNCTION expandir_consulta(texto text) RETURNS text
 LANGUAGE plpgsql STABLE
 AS $$
@@ -259,7 +260,7 @@ $$;
 -- Así una consulta por uso (larga, descriptiva) se ordena sobre todo por significado, y una por nombre,
 -- por las palabras.
 -- Pasa un producto si su similitud semántica supera similitud_minima, o si tiene todas las palabras
--- de la búsqueda, o si el nombre se parece mucho (errores de tipeo); en los dos últimos casos la
+-- de la búsqueda, o si el nombre se parece mucho (errores de tipeo; parecido de 0,5 o más; con 0,4 "domotica" traía "pata conica"); en los dos últimos casos la
 -- semántica no puede ser lejana (>= 0,2). Así una consulta ajena a la ferretería sigue volviendo vacía.
 DROP FUNCTION IF EXISTS buscar_productos_fusion(vector, text, integer, real, integer, real, real);
 CREATE FUNCTION buscar_productos_fusion(
@@ -352,7 +353,7 @@ AS $$
            (rrf * (k + 1) / (1.0 + peso_texto + peso_trigrama))::real AS puntaje
     FROM candidatos
     WHERE similitud >= similitud_minima
-       OR (similitud >= 0.2 AND (todas_las_palabras OR sim_nombre >= 0.4))
+       OR (similitud >= 0.2 AND (todas_las_palabras OR sim_nombre >= 0.5))
     ORDER BY rrf DESC, similitud DESC
     LIMIT limite;
 $$;

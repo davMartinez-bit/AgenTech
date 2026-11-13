@@ -8,18 +8,33 @@ export type Producto = {
   precio: number | null;
   stock: number;
   unidad_medida?: string | null;
+  unidad?: string;
   foto?: string | null;
 };
 
 export type ResultadoConsulta = {
   consulta_id: number;
+  origen?: "buscador" | "asistente";
   texto: string;
   texto_buscado: string;
   se_corrigio: boolean;
+  // Solo en el asistente: las búsquedas cortas en que se tradujo el pedido del cliente.
+  interpretacion?: string[];
   modelo: string;
   latencia_ms: number;
   agotado_parecido: { sku: string; nombre: string; foto: string | null } | null;
   resultados: (Producto & { score: number })[];
+  modo?: "semantica" | "solo_texto";
+};
+
+export type RespuestaAsistente = {
+  consulta_id: number;
+  respuesta: string;
+  recomendados: { sku: string; nombre: string }[];
+  ejemplos: number;
+  generada: boolean;
+  modelo: string | null;
+  latencia_ms: number;
 };
 
 export type Complemento = Producto & { veces_juntos: number; confianza: number };
@@ -31,6 +46,7 @@ export type Alerta = {
   tipo: TipoAlerta;
   urgencia: 1 | 2 | 3;
   sku: string | null;
+  unidad?: string;
   nombre: string;
   categoria: string | null;
   aviso: string;
@@ -77,8 +93,9 @@ export const api = {
   complementos: (sku: string, limite = 4) =>
     pedir<Complemento[]>(`/productos/${encodeURIComponent(sku)}/complementos?limite=${limite}`),
   categorias: () => pedir<{ nombre: string; productos: number; disponibles: number }[]>("/categorias"),
-  consulta: (texto: string, limite = 8) =>
-    pedir<ResultadoConsulta>("/consulta", { method: "POST", body: JSON.stringify({ texto, limite }) }),
+  // "buscador": palabras simples o compuestas. "asistente": lo que dijo el cliente (suma las frases de cliente).
+  consulta: (texto: string, limite = 8, origen: "buscador" | "asistente" = "buscador") =>
+    pedir<ResultadoConsulta>("/consulta", { method: "POST", body: JSON.stringify({ texto, limite, origen }) }),
   // Avisa qué resultado se abrió. No interrumpe al vendedor si falla.
   clic: (consultaId: number, sku: string, origen: "buscador" | "asistente") =>
     pedir(`/consulta/${consultaId}/clic`, { method: "POST", body: JSON.stringify({ sku, origen }) }).catch(() => {}),
@@ -95,10 +112,18 @@ export const api = {
   consultas: () => pedir<any[]>("/admin/consultas"),
 };
 
+// Respuesta del asistente para una consulta ya hecha. Puede tardar de 1 a 10 s y fallar con 503.
+export const pedirRespuesta = (consultaId: number) =>
+  pedir<RespuestaAsistente>(`/consulta/${consultaId}/respuesta`, { method: "POST" });
+
 const clp = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 const num = new Intl.NumberFormat("es-CL", { maximumFractionDigits: 1 });
 
 export const pesos = (v: number | null | undefined) => (v == null ? "Sin precio" : clp.format(v));
 export const numero = (v: number | null | undefined) => (v == null ? "—" : num.format(v));
+// Cantidad con su unidad de venta: "3,8 m", "12 kg". Lo que se vende por unidad queda como número solo.
+const ABREVIATURA: Record<string, string> = { metro: "m", kilo: "kg", litro: "L" };
+export const cantidad = (v: number | null | undefined, unidad?: string) =>
+  unidad && ABREVIATURA[unidad] ? `${numero(v)} ${ABREVIATURA[unidad]}` : numero(v);
 export const pesosCortos = (v: number) =>
   Math.abs(v) >= 1_000_000 ? `$${num.format(v / 1_000_000)} M` : Math.abs(v) >= 1000 ? `$${num.format(v / 1000)} mil` : clp.format(v);

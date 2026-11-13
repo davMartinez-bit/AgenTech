@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { api, numero, pesos, pesosCortos, type Alerta, type Alertas, type AvisosAgente, type TipoAlerta } from "../api";
+import { api, cantidad, numero, pesos, pesosCortos, type Alerta, type Alertas, type AvisosAgente, type TipoAlerta } from "../api";
 import { Encabezado } from "../componentes/Encabezado";
 
 // Panel administrativo en cuatro pestañas: "Hoy" abre con los avisos del agente y pocas cifras;
@@ -204,7 +204,7 @@ function Ventas() {
       )} />
       <div className="lg:col-span-2">
         <Grafico id="productos_mas_vendidos" tabla={[
-          ["nombre", "Producto"], ["unidades", "Unidades", numero], ["total", "Vendido", pesos], ["stock", "Stock en Bsale", numero],
+          ["nombre", "Producto"], ["unidades", "Cantidad", enCantidad], ["total", "Vendido", pesos], ["stock", "Stock en Bsale", enCantidad],
         ]} />
       </div>
     </div>
@@ -215,31 +215,33 @@ function Ventas() {
 
 const hace = (d: number | null) => (d == null ? "—" : d <= 0 ? "hoy" : d === 1 ? "ayer" : `hace ${numero(d)} días`);
 const dias = (d: number | null) => (d == null ? "—" : d < 1 ? "menos de 1 día" : `${numero(d)} días`);
+// Cantidades de producto con su unidad de venta (metro, kilo, litro); la fila o el aviso trae el campo `unidad`.
+const enCantidad = (v: number | null, fila: { unidad?: string }) => cantidad(v, fila.unidad);
 
 const LISTAS: { tipo: TipoAlerta; nombre: string; ayuda: string; columnas: Columna[] }[] = [
   {
     tipo: "por_agotarse",
     nombre: "Por agotarse",
     ayuda: "Se venden y el stock alcanza para menos de 14 días al ritmo de los últimos 30.",
-    columnas: [["stock", "Quedan", numero], ["unidades_30", "Vendidos 30 días", numero], ["dias_alcanza", "Alcanza", dias], ["comprar", "Comprar", numero]],
+    columnas: [["stock", "Quedan", enCantidad], ["unidades_30", "Vendidos 30 días", enCantidad], ["dias_alcanza", "Alcanza", dias], ["comprar", "Comprar", enCantidad]],
   },
   {
     tipo: "agotado_con_demanda",
     nombre: "Agotados que se vendían",
     ayuda: "Tuvieron ventas en los últimos 90 días y están en 0, o lo vendido después de la última lectura de Bsale ya los habría agotado (esos dicen Revisa).",
-    columnas: [["unidades_90", "Vendidos 90 días", numero], ["al_mes", "Salían al mes", numero], ["dias_sin_vender", "Última venta", hace], ["dias_sin_comprar", "Última compra", hace]],
+    columnas: [["unidades_90", "Vendidos 90 días", enCantidad], ["al_mes", "Salían al mes", enCantidad], ["dias_sin_vender", "Última venta", hace], ["dias_sin_comprar", "Última compra", hace]],
   },
   {
     tipo: "agotado_olvidado",
     nombre: "En cero hace tiempo",
     ayuda: "Están en 0, no se venden hace más de 90 días y antes sí se vendían.",
-    columnas: [["unidades_365", "Vendidos en el año", numero], ["dias_sin_vender", "Última venta", hace], ["dias_sin_comprar", "Última compra", hace]],
+    columnas: [["unidades_365", "Vendidos en el año", enCantidad], ["dias_sin_vender", "Última venta", hace], ["dias_sin_comprar", "Última compra", hace]],
   },
   {
     tipo: "stock_parado",
     nombre: "Stock parado",
     ayuda: "Hay stock por $30.000 o más y no se vende hace 120 días o más.",
-    columnas: [["stock", "En bodega", numero], ["valor", "Valor a precio de venta", pesos], ["dias_sin_vender", "Última venta", (d) => (d == null ? "sin ventas en el año" : hace(d))]],
+    columnas: [["stock", "En bodega", enCantidad], ["valor", "Valor a precio de venta", pesos], ["dias_sin_vender", "Última venta", (d) => (d == null ? "sin ventas en el año" : hace(d))]],
   },
 ];
 
@@ -290,7 +292,7 @@ function Inventario({ alertas }: { alertas: Alertas | null }) {
                     </div>
                   </td>
                   {lista.columnas.map(([k, , f]) => (
-                    <td key={k} className="py-2 text-right tabular-nums">{f ? f(a.datos[k]) : a.datos[k]}</td>
+                    <td key={k} className="py-2 text-right tabular-nums">{f ? f(a.datos[k], a) : a.datos[k]}</td>
                   ))}
                   <td className="py-2 pl-4 text-gris">{a.accion}</td>
                 </tr>
@@ -363,7 +365,7 @@ function Indicador({ titulo, valor, nota, tono }: { titulo: string; valor: strin
   );
 }
 
-type Columna = [string, string, ((v: any) => string)?];
+type Columna = [string, string, ((v: any, fila: any) => string)?];
 
 function Grafico({ id, render, tabla }: { id: string; render?: (datos: any[]) => React.ReactElement; tabla?: Columna[] }) {
   const [g, setG] = useState<{ titulo: string; descripcion: string; datos: any[] } | null>(null);
@@ -420,7 +422,7 @@ function Grafico({ id, render, tabla }: { id: string; render?: (datos: any[]) =>
                 {g.datos.map((fila, n) => (
                   <tr key={n} className="border-t border-borde">
                     {tabla.map(([k, , f], i) => (
-                      <td key={k} className={`py-1.5 ${i ? "text-right tabular-nums" : "pr-2"}`}>{f ? f(fila[k]) : fila[k]}</td>
+                      <td key={k} className={`py-1.5 ${i ? "text-right tabular-nums" : "pr-2"}`}>{f ? f(fila[k], fila) : fila[k]}</td>
                     ))}
                   </tr>
                 ))}

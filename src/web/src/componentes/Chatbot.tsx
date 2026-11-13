@@ -1,19 +1,42 @@
 import { useEffect, useRef, useState } from "react";
-import { api, numero, pesos, type Complemento, type Producto, type ResultadoConsulta } from "../api";
+import { api, cantidad, pedirRespuesta, pesos, type Complemento, type Producto, type ResultadoConsulta } from "../api";
 
-// Chatbot del vendedor (historia 6). Cada mensaje se busca con /consulta y la respuesta es la tabla
-// de resultados (SKU, nombre, precio, stock, relevancia). El texto lo arma el sistema, no un modelo de lenguaje:
-// así nunca se inventa un producto, un precio ni un stock.
+// Asistente del vendedor (historia 6). Aquí va lo que dijo el cliente con sus palabras, o lo que el vendedor
+// no conoce; las palabras simples van al buscador. Cada mensaje se busca con /consulta (origen "asistente",
+// que suma las frases de cliente) y se responde con la tabla de resultados (SKU, nombre, precio, stock,
+// relevancia). Después llega el consejo redactado por el modelo de lenguaje, que solo puede nombrar
+// productos de esa tabla: precio y stock siempre salen de la base de datos.
 
 type Mensaje =
   | { de: "vendedor"; texto: string }
-  | { de: "asistente"; texto: string; resultado?: ResultadoConsulta; complementos?: Complemento[] };
+  | {
+      de: "asistente";
+      texto: string;
+      resultado?: ResultadoConsulta;
+      complementos?: Complemento[];
+      // undefined: no se pidió consejo. null: se está redactando. Texto: listo.
+      consejo?: string | null;
+      recomendados?: string[];
+    };
 
-const SUGERENCIAS = ["algo pa tapar goteras", "tela resistente para tapizar un sillón", "tarugos pal concreto", "pintura pa reja que no se oxide"];
+const SUGERENCIAS = ["algo para tapar goteras", "tela resistente para tapizar un sillón", "tarugos para concreto", "pintura para reja que no se oxide"];
 
-export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: () => void; abrir: (p: Producto) => void }) {
+export function Chatbot({
+  abierto,
+  cerrar,
+  abrir,
+  pregunta,
+  alRecibir,
+}: {
+  abierto: boolean;
+  cerrar: () => void;
+  abrir: (p: Producto) => void;
+  // Pregunta que llega desde el buscador ("Preguntar al asistente"). Se envía sola y se avisa con alRecibir.
+  pregunta?: string | null;
+  alRecibir?: () => void;
+}) {
   const [mensajes, setMensajes] = useState<Mensaje[]>([
-    { de: "asistente", texto: "Hola. Escríbeme lo que pide el cliente, tal como lo dice, y te muestro lo que tenemos con stock." },
+    { de: "asistente", texto: "Hola. Escríbeme lo que pide el cliente, tal como lo dice, y te digo qué ofrecerle de lo que tenemos con stock." },
   ]);
   const [texto, setTexto] = useState("");
   const [pensando, setPensando] = useState(false);
@@ -23,6 +46,12 @@ export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: 
     fin.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes, pensando]);
 
+  useEffect(() => {
+    if (!abierto || !pregunta || pensando) return;
+    alRecibir?.();
+    enviar(pregunta);
+  }, [abierto, pregunta, pensando]);
+
   async function enviar(t: string) {
     const consulta = t.trim();
     if (!consulta || pensando) return;
@@ -30,14 +59,27 @@ export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: 
     setMensajes((m) => [...m, { de: "vendedor", texto: consulta }]);
     setPensando(true);
     try {
-      const r = await api.consulta(consulta, 6);
+      const r = await api.consulta(consulta, 6, "asistente");
       const aviso = r.agotado_parecido ? `“${r.agotado_parecido.nombre}” está agotado. ` : "";
       const respuesta = r.resultados.length
-        ? `${aviso}${aviso ? "Puedes ofrecer" : "Encontré"} ${r.resultados.length} ${r.resultados.length === 1 ? "producto" : "productos"} con stock:`
+        ? `${aviso}${aviso ? "Puedes ofrecer" : "Encontré"} ${r.resultados.length} ${r.resultados.length === 1 ? "producto" : "productos"} con stock${
+            r.interpretacion?.length ? ` (busqué: ${r.interpretacion.join(", ")})` : ""
+          }:`
         : `${aviso}No tengo productos con stock que se parezcan a eso. Pregúntale al cliente para qué lo necesita o prueba con otras palabras.`;
       // Venta cruzada: lo que otros clientes llevaron junto con el primer resultado.
       const complementos = r.resultados.length ? await api.complementos(r.resultados[0].sku, 3).catch(() => []) : [];
-      setMensajes((m) => [...m, { de: "asistente", texto: respuesta, resultado: r, complementos }]);
+      const conResultados = r.resultados.length > 0;
+      setMensajes((m) => [...m, { de: "asistente", texto: respuesta, resultado: r, complementos, consejo: conResultados ? null : undefined }]);
+      // El consejo llega después: la tabla ya se ve y esto no la demora. Si falla, se queda solo la tabla.
+      if (conResultados) {
+        const poner = (consejo: string | undefined, recomendados: string[]) =>
+          setMensajes((m) =>
+            m.map((x) => (x.de === "asistente" && x.resultado?.consulta_id === r.consulta_id ? { ...x, consejo, recomendados } : x)),
+          );
+        pedirRespuesta(r.consulta_id)
+          .then((a) => poner(a.respuesta, a.recomendados.map((p) => p.sku)))
+          .catch(() => poner(undefined, []));
+      }
     } catch (e: any) {
       setMensajes((m) => [...m, { de: "asistente", texto: `No pude buscar: ${e.message}` }]);
     } finally {
@@ -54,8 +96,8 @@ export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: 
       <div className="flex items-center gap-3 bg-negro px-4 py-3 text-white">
         <div className="grid h-9 w-9 place-items-center rounded-full bg-cobre font-black text-negro">A</div>
         <div>
-          <div className="font-bold">Asistente de búsqueda</div>
-          <div className="text-xs text-crema/70">Solo muestra productos reales con stock</div>
+          <div className="font-bold">Asistente del vendedor</div>
+          <div className="text-xs text-crema/70">Cuéntale lo que pide el cliente · solo productos con stock</div>
         </div>
         <button onClick={cerrar} className="ml-auto rounded px-2 py-1 text-crema/80 hover:bg-white/10" aria-label="Cerrar">
           ✕
@@ -71,6 +113,11 @@ export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: 
           ) : (
             <div key={i} className="max-w-[95%] rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm">
               <p>{m.texto}</p>
+              {m.consejo !== undefined && (
+                <p aria-live="polite" className="mt-2 rounded-lg border-l-4 border-cobre bg-crema/60 px-3 py-2 text-sm leading-relaxed">
+                  {m.consejo ?? "Pensando qué conviene ofrecer…"}
+                </p>
+              )}
               {m.resultado && m.resultado.resultados.length > 0 && (
                 <table className="mt-2 w-full text-left text-sm">
                   <thead className="text-xs text-gris">
@@ -89,11 +136,16 @@ export function Chatbot({ abierto, cerrar, abrir }: { abierto: boolean; cerrar: 
                         className="cursor-pointer border-t border-borde hover:bg-crema/50"
                       >
                         <td className="py-1.5 pr-2">
-                          <div className="font-medium leading-tight">{p.nombre}</div>
+                          <div className="font-medium leading-tight">
+                            {m.recomendados?.includes(p.sku) && (
+                              <span className="mr-1.5 rounded bg-cobre px-1.5 py-0.5 align-middle text-[10px] font-bold uppercase text-negro">Sugerido</span>
+                            )}
+                            {p.nombre}
+                          </div>
                           <div className="text-xs text-gris">SKU {p.sku}</div>
                         </td>
                         <td className="py-1.5 text-right font-semibold text-rojo">{pesos(p.precio)}</td>
-                        <td className="py-1.5 text-right">{numero(p.stock)}</td>
+                        <td className="py-1.5 text-right">{cantidad(p.stock, p.unidad)}</td>
                         <td className="py-1.5 text-right text-gris">{Math.round(p.score * 100)}%</td>
                       </tr>
                     ))}

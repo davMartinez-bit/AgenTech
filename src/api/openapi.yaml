@@ -58,6 +58,10 @@ paths:
         embedding con el mismo modelo del worker y llama a `buscar_productos_fusion`, que combina la
         similitud semántica con el texto completo y el parecido del nombre. Solo productos activos con
         stock > 0. Si nada calza, `resultados` viene vacío (no es un error).
+
+        `origen` dice quién pregunta. `buscador` es para palabras simples o compuestas ("reparación de
+        techo") y no usa las frases de cliente. `asistente` es para lo que dijo el cliente ("algo para
+        tapar goteras") y suma la lista de frases de cliente a la fusión.
       requestBody:
         required: true
         content:
@@ -66,7 +70,8 @@ paths:
               type: object
               required: [texto]
               properties:
-                texto: { type: string, example: algo pa tapar goteras }
+                texto: { type: string, example: reparación de techo }
+                origen: { type: string, enum: [buscador, asistente], default: buscador }
                 limite: { type: integer, minimum: 1, maximum: 50, default: 10 }
                 similitud_minima: { type: number, minimum: 0, maximum: 1 }
                 usuario_id: { type: integer }
@@ -108,6 +113,43 @@ paths:
                   posicion: { type: integer, description: "Posición del producto en los resultados (1 = primero)" }
         "400": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /consulta/{id}/respuesta:
+    post:
+      tags: [Consulta]
+      summary: Sugiere al vendedor qué ofrecer a partir de los productos de una consulta
+      description: |
+        Toma hasta 8 productos de los resultados de la consulta y pide al modelo de lenguaje de 1 a 3
+        recomendaciones (SKU de la lista) y una frase corta para el cliente. Usa como ejemplos de tono las
+        conversaciones de mostrador parecidas. Si la consulta no tiene productos no llama al modelo. Si el
+        modelo no responde con un JSON utilizable, devuelve una frase genérica con `generada: false`.
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer }, description: "consulta_id que devolvió POST /consulta" }
+      responses:
+        "200":
+          description: Sugerencia para el vendedor
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [consulta_id, respuesta, recomendados, ejemplos, generada, modelo, latencia_ms]
+                properties:
+                  consulta_id: { type: integer }
+                  respuesta: { type: string }
+                  recomendados:
+                    type: array
+                    maxItems: 3
+                    items:
+                      type: object
+                      properties:
+                        sku: { type: string }
+                        nombre: { type: string }
+                  ejemplos: { type: integer, description: "Cantidad de conversaciones parecidas usadas como ejemplo" }
+                  generada: { type: boolean, description: "false si no hubo sugerencia del modelo (sin productos, JSON inválido o respuesta vacía)" }
+                  modelo: { type: string, nullable: true, description: "Modelo de lenguaje usado; null si no se generó" }
+                  latencia_ms: { type: integer }
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /productos:
     get:
       tags: [Catálogo]
@@ -263,14 +305,23 @@ components:
         categoria: { type: [string, "null"] }
         precio: { type: [number, "null"] }
         stock: { type: number }
+        unidad:
+          type: string
+          enum: [metro, kilo, litro, unidad]
+          description: Unidad en que se vende el producto. Se toma de unidad_medida; si viene vacía, se deduce de permite_decimal y del nombre.
         score: { type: number, description: Similitud coseno entre 0 y 1 }
     ResultadoConsulta:
       type: object
       properties:
         consulta_id: { type: integer }
+        origen: { type: string, enum: [buscador, asistente], description: "Quién preguntó: el buscador (palabras) o el asistente (lo que dijo el cliente)" }
         texto: { type: string }
         texto_buscado: { type: string, description: "Texto con el que se buscó, ya corregido y con sinónimos" }
         se_corrigio: { type: boolean, description: "Indica si el texto buscado difiere del que escribió el vendedor" }
+        modo:
+          type: string
+          enum: [semantica, solo_texto]
+          description: "solo_texto si el modelo de embeddings no respondió: la búsqueda fue solo por palabras y no hubo aviso de agotado parecido"
         modelo: { type: string }
         similitud_minima: { type: number }
         latencia_ms: { type: integer }

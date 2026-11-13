@@ -38,6 +38,7 @@ export type Situacion = {
   unidades_365: number;
   dias_sin_vender: number | null;
   dias_sin_comprar: number | null;
+  unidad: string; // unidad de venta del producto: metro, kilo, litro o unidad
 };
 
 export type Alerta = {
@@ -46,6 +47,7 @@ export type Alerta = {
   sku: string | null;
   nombre: string;
   categoria: string | null;
+  unidad: string; // unidad de venta: metro, kilo, litro o unidad
   aviso: string;
   accion: string;
   monto: number; // venta mensual en juego; en stock_parado, valor inmovilizado
@@ -63,11 +65,14 @@ export const ETIQUETAS: Record<TipoAlerta, string> = {
 const clp = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 const num = new Intl.NumberFormat("es-CL", { maximumFractionDigits: 1 });
 const n = (v: number) => num.format(v);
+// Cantidad con su unidad de venta: "3,8 m", "12 kg". Lo que se vende por unidad queda como número solo.
+const ABREVIATURA: Record<string, string> = { metro: "m", kilo: "kg", litro: "L" };
+const cant = (v: number, unidad: string) => (ABREVIATURA[unidad] ? `${n(v)} ${ABREVIATURA[unidad]}` : n(v));
 const hace = (dias: number) => (dias <= 0 ? "hoy" : dias === 1 ? "ayer" : `hace ${dias} días`);
 
 /** Decide si un producto merece aviso y lo redacta con sus cifras. Sin base de datos: se puede probar sola. */
 export function clasificar(p: Situacion, hayRecepciones: boolean): Alerta | null {
-  const base = { sku: p.sku, nombre: p.nombre, categoria: p.categoria };
+  const base = { sku: p.sku, nombre: p.nombre, categoria: p.categoria, unidad: p.unidad };
   const precio = p.precio ?? 0;
   const stock = p.stock_estimado;
   const datos = {
@@ -84,10 +89,13 @@ export function clasificar(p: Situacion, hayRecepciones: boolean): Alerta | null
   // No se sabe hasta la próxima lectura del stock, así que se avisa como "revisa", no como hecho.
   const estimado = stock <= 0 && p.stock_bsale > 0;
   const enCero = estimado
-    ? `Puede que ya no quede: Bsale tenía ${n(p.stock_bsale)} en su última lectura y después se vendieron ${n(p.vendido_desde_corte)}.`
+    ? `Puede que ya no quede: Bsale tenía ${cant(p.stock_bsale, p.unidad)} en su última lectura y después se vendieron ${cant(p.vendido_desde_corte, p.unidad)}.`
     : "Está en 0";
   const compra =
     !hayRecepciones ? "" : p.dias_sin_comprar == null ? " No tiene compras registradas en Bsale." : ` La última compra fue ${hace(p.dias_sin_comprar)}.`;
+
+  // "unas 12" si se vende por unidad; "unos 12 m" si se vende por metro, kilo o litro.
+  const unas = (v: number) => (p.unidad === "unidad" ? `unas ${n(v)}` : `unos ${cant(v, p.unidad)}`);
 
   if (stock > 0 && p.unidades_30 >= REGLAS.ventasMinimas30) {
     const alcanza = stock / (p.unidades_30 / 30);
@@ -100,10 +108,10 @@ export function clasificar(p: Situacion, hayRecepciones: boolean): Alerta | null
         tipo: "por_agotarse",
         urgencia: alcanza < REGLAS.diasUrgente ? 1 : 2,
         aviso:
-          `Quedan ${n(stock)} y se vendieron ${n(p.unidades_30)} en los últimos 30 días: alcanza para ` +
+          `Quedan ${cant(stock, p.unidad)} y se vendieron ${cant(p.unidades_30, p.unidad)} en los últimos 30 días: alcanza para ` +
           `${dias < 1 ? "menos de un día" : dias === 1 ? "1 día" : `unos ${dias} días`}.` +
-          (acelera ? ` Se está vendiendo más que antes: en los 30 días anteriores fueron ${n(p.unidades_30_previos)}.` : ""),
-        accion: `Compra unas ${n(comprar)} para cubrir ${REGLAS.diasACubrir} días.`,
+          (acelera ? ` Se está vendiendo más que antes: en los 30 días anteriores fueron ${cant(p.unidades_30_previos, p.unidad)}.` : ""),
+        accion: `Compra ${unas(comprar)} para cubrir ${REGLAS.diasACubrir} días.`,
         monto: Math.round(p.unidades_30 * precio),
         datos: { ...datos, dias_alcanza: dias, comprar },
       };
@@ -118,13 +126,13 @@ export function clasificar(p: Situacion, hayRecepciones: boolean): Alerta | null
       urgencia: p.unidades_30 >= REGLAS.ventasMinimas30 ? 1 : 2,
       aviso:
         (estimado
-          ? `${enCero} En los últimos 90 días se vendieron ${n(p.unidades_90)} (${clp.format(p.total_90)}).`
-          : `${enCero} y se vendieron ${n(p.unidades_90)} en los últimos 90 días (${clp.format(p.total_90)}).`) +
+          ? `${enCero} En los últimos 90 días se vendieron ${cant(p.unidades_90, p.unidad)} (${clp.format(p.total_90)}).`
+          : `${enCero} y se vendieron ${cant(p.unidades_90, p.unidad)} en los últimos 90 días (${clp.format(p.total_90)}).`) +
         (p.dias_sin_vender != null ? ` La última venta fue ${hace(p.dias_sin_vender)}.` : "") +
         compra,
       accion: estimado
-        ? `Revisa cuánto queda y reponlo si falta: se vendían unas ${n(alMes)} al mes.`
-        : `Reponlo: se vendían unas ${n(alMes)} al mes.`,
+        ? `Revisa cuánto queda y reponlo si falta: se vendían ${unas(alMes)} al mes.`
+        : `Reponlo: se vendían ${unas(alMes)} al mes.`,
       monto: Math.round(p.total_90 / 3),
       datos: { ...datos, al_mes: alMes, stock_bsale: estimado ? p.stock_bsale : null, vendido_desde_corte: estimado ? p.vendido_desde_corte : null },
     };
@@ -136,7 +144,7 @@ export function clasificar(p: Situacion, hayRecepciones: boolean): Alerta | null
       tipo: "agotado_olvidado",
       urgencia: 3,
       aviso:
-        `Está en 0 hace tiempo: la última venta fue ${hace(p.dias_sin_vender)} y en el último año se vendieron ${n(p.unidades_365)}.` +
+        `Está en 0 hace tiempo: la última venta fue ${hace(p.dias_sin_vender)} y en el último año se vendieron ${cant(p.unidades_365, p.unidad)}.` +
         compra,
       accion: "Decide si lo vuelves a traer o si lo sacas del catálogo.",
       monto: Math.round((p.unidades_365 * precio) / 12),
@@ -153,7 +161,7 @@ export function clasificar(p: Situacion, hayRecepciones: boolean): Alerta | null
       tipo: "stock_parado",
       urgencia: 3,
       aviso:
-        `Hay ${n(stock)} en bodega (${clp.format(valor)} a precio de venta) y ` +
+        `Hay ${cant(stock, p.unidad)} en bodega (${clp.format(valor)} a precio de venta) y ` +
         (p.dias_sin_vender == null ? "no registra ventas en el último año." : `no se vende ${hace(p.dias_sin_vender)}.`) +
         compra,
       accion: "Ponlo a la vista o en oferta, y no lo recompres por ahora.",
@@ -168,7 +176,9 @@ const TIPOS = Object.keys(ETIQUETAS) as TipoAlerta[];
 
 export async function calcularAlertas() {
   const [productos, busquedas, [fechas]] = await Promise.all([
-    consultar<Situacion & { stock_leido_el: string }>("SELECT * FROM productos_situacion"),
+    consultar<Situacion & { stock_leido_el: string }>(
+      "SELECT s.*, unidad_venta(p.nombre, p.permite_decimal, p.unidad_medida) AS unidad FROM productos_situacion s JOIN productos p ON p.id = s.producto_id",
+    ),
     consultar<{ busqueda: string; veces: number; ultima_vez: string }>(
       `SELECT lower(btrim(texto)) AS busqueda, count(*)::int AS veces, max(creado_en)::date AS ultima_vez
        FROM consultas WHERE cantidad_resultados = 0 AND creado_en >= now() - interval '30 days'
@@ -198,6 +208,7 @@ export async function calcularAlertas() {
       sku: null,
       nombre: b.busqueda,
       categoria: null,
+      unidad: "unidad",
       aviso: `Lo buscaron ${b.veces} veces en los últimos 30 días y el buscador no encontró nada con stock.`,
       accion: "Revisa si conviene traerlo o si en el catálogo tiene otro nombre.",
       monto: 0,
@@ -252,6 +263,7 @@ Reglas:
 - Una o dos frases, máximo 35 palabras, en una sola línea.
 - No nombres el producto: su nombre ya está escrito antes de tu frase.
 - Usa solo las cifras del aviso y escríbelas igual. No calcules, no redondees, no inventes cifras ni causas.
+- Si el aviso trae "unidad de venta", escribe las cantidades con esa unidad (por ejemplo: 3,8 metros).
 - Termina con qué hacer, con su cifra si el aviso la trae.
 - Sin comillas, sin viñetas, sin negritas, sin título.`;
 }
@@ -267,10 +279,16 @@ export function elegirAvisos(alertas: Alerta[]): Alerta[] {
   return cupos.flatMap(([tipo, cupo]) => alertas.filter((a) => a.tipo === tipo).slice(0, cupo));
 }
 
+const UNIDAD_PLURAL: Record<string, string> = { metro: "metros", kilo: "kilos", litro: "litros" };
+
 /** Los datos de un aviso como lista de campos: así el agente redacta y no copia una frase hecha. */
 export function datosParaAgente(a: Alerta): string {
   const d = a.datos;
-  const campos: (string | false)[] = [`tipo: ${ETIQUETAS[a.tipo]}`, `producto: ${a.nombre}`];
+  const campos: (string | false)[] = [
+    UNIDAD_PLURAL[a.unidad] && `unidad de venta: ${UNIDAD_PLURAL[a.unidad]}`,
+    `tipo: ${ETIQUETAS[a.tipo]}`,
+    `producto: ${a.nombre}`,
+  ];
   if (a.tipo === "por_agotarse") {
     const acelera = d.unidades_30_previos! > 0 && d.unidades_30! >= 1.5 * d.unidades_30_previos!;
     campos.push(

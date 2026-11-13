@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, numero, pesos, type Producto, type ResultadoConsulta } from "../api";
+import { api, cantidad, pesos, type Producto, type ResultadoConsulta } from "../api";
 import { Chatbot } from "../componentes/Chatbot";
 import { Encabezado } from "../componentes/Encabezado";
 import { Ficha } from "../componentes/Ficha";
@@ -16,6 +16,8 @@ export function Vendedor({ salir }: { salir: () => void }) {
   const [pagina, setPagina] = useState(1);
   const [catalogo, setCatalogo] = useState<{ total: number; productos: Producto[] }>({ total: 0, productos: [] });
   const [semantica, setSemantica] = useState<ResultadoConsulta | null>(null);
+  // Lo que el vendedor manda desde el buscador al asistente (una frase del cliente, no palabras sueltas).
+  const [paraAsistente, setParaAsistente] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
   const [chatAbierto, setChatAbierto] = useState(false);
@@ -44,13 +46,22 @@ export function Vendedor({ salir }: { salir: () => void }) {
     }
     setCargando(true);
     try {
-      setSemantica(await api.consulta(texto, 12));
+      // El buscador es para palabras simples o compuestas. Lo que dijo el cliente va al asistente.
+      setSemantica(await api.consulta(texto, 12, "buscador"));
       setError("");
     } catch (err: any) {
       setError(err.message);
     } finally {
       setCargando(false);
     }
+  }
+
+  // Una búsqueda larga suele ser el problema que contó el cliente: eso lo entiende mejor el asistente.
+  const pareceFrase = !!semantica && semantica.texto.trim().split(/\s+/).length >= 5;
+
+  function preguntarAlAsistente(pregunta: string) {
+    setParaAsistente(pregunta);
+    setChatAbierto(true);
   }
 
   const productos: (Producto & { score?: number })[] = semantica ? semantica.resultados : catalogo.productos;
@@ -74,7 +85,7 @@ export function Vendedor({ salir }: { salir: () => void }) {
                 onClick={() => (setModo(m), setSemantica(null))}
                 className={`rounded-full px-4 py-1.5 font-semibold ${modo === m ? "bg-crema text-negro" : "text-crema/70 hover:text-crema"}`}
               >
-                {m === "inteligente" ? "Como lo dice el cliente" : "Por nombre o SKU"}
+                {m === "inteligente" ? "Por palabras" : "Por nombre o SKU"}
               </button>
             ))}
           </div>
@@ -82,12 +93,17 @@ export function Vendedor({ salir }: { salir: () => void }) {
             <input
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
-              placeholder={modo === "inteligente" ? "Ej.: algo pa tapar goteras, tarugos pal concreto…" : "Ej.: silicona, A000000001"}
+              placeholder={modo === "inteligente" ? "Ej.: reparación de techo, forrado de sillones, huincha aisladora" : "Ej.: silicona, A000000001"}
               className="w-full rounded-xl border-0 bg-white px-5 py-4 text-lg outline-none ring-cobre focus:ring-4"
             />
             <button className="rounded-xl bg-rojo px-6 font-bold text-white hover:bg-rojo-oscuro">Buscar</button>
           </div>
         </form>
+        {semantica?.modo === "solo_texto" && (
+          <p className="mx-auto mt-3 max-w-3xl px-4 text-center text-xs text-crema/70">
+            Búsqueda solo por palabras: el modelo de búsqueda no está disponible.
+          </p>
+        )}
       </section>
 
       <main className="mx-auto max-w-7xl px-4 py-6">
@@ -123,18 +139,36 @@ export function Vendedor({ salir }: { salir: () => void }) {
         )}
         {semantica?.se_corrigio && <p className="mb-3 text-xs text-gris">{`Mostrando resultados para "${semantica.texto_buscado}"`}</p>}
 
+        {semantica && !cargando && (pareceFrase || !semantica.resultados.length) && (
+          <div className="mb-5 flex flex-wrap items-center gap-3 rounded-xl border-l-4 border-cobre bg-white px-5 py-4 shadow-sm">
+            <p className="text-sm leading-relaxed">
+              ¿Es lo que te dijo el cliente? El buscador funciona mejor con pocas palabras. El asistente entiende el problema completo.
+            </p>
+            <button
+              onClick={() => preguntarAlAsistente(semantica.texto)}
+              className="ml-auto rounded-lg bg-negro px-4 py-2 text-sm font-bold text-white hover:brightness-125"
+            >
+              Preguntar al asistente
+            </button>
+          </div>
+        )}
+
         {error && <p className="mb-4 rounded-lg bg-rojo/10 px-4 py-3 text-rojo">{error}</p>}
         {cargando && <p className="py-10 text-center text-gris">Buscando…</p>}
         {!cargando && semantica && !semantica.resultados.length && (
           <p className="rounded-xl bg-white px-6 py-10 text-center text-gris">
-            No encontramos productos con stock que se parezcan a lo que pide el cliente. Prueba con otras palabras o pregúntale para qué lo necesita.
+            No encontramos productos con stock para esas palabras. Prueba con otras o pregúntale al asistente.
           </p>
         )}
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
           {!cargando &&
             productos.map((p) => (
-              <Tarjeta key={p.sku} p={p} abrir={() => (semantica && api.clic(semantica.consulta_id, p.sku, "buscador"), setFicha(p))} />
+              <Tarjeta
+                key={p.sku}
+                p={p}
+                abrir={() => (semantica && api.clic(semantica.consulta_id, p.sku, "buscador"), setFicha(p))}
+              />
             ))}
         </div>
 
@@ -153,7 +187,13 @@ export function Vendedor({ salir }: { salir: () => void }) {
         )}
       </main>
 
-      <Chatbot abierto={chatAbierto} cerrar={() => setChatAbierto(false)} abrir={setFicha} />
+      <Chatbot
+        abierto={chatAbierto}
+        cerrar={() => setChatAbierto(false)}
+        abrir={setFicha}
+        pregunta={paraAsistente}
+        alRecibir={() => setParaAsistente(null)}
+      />
       {ficha && <Ficha producto={ficha} cerrar={() => setFicha(null)} abrir={setFicha} />}
     </div>
   );
@@ -192,12 +232,14 @@ function Tarjeta({ p, abrir }: { p: Producto & { score?: number }; abrir: () => 
       </div>
       <div className="flex flex-1 flex-col gap-1 p-3">
         <div className="text-xs uppercase tracking-wide text-gris">{p.categoria ?? "Sin categoría"}</div>
-        <h3 className="line-clamp-2 text-sm font-semibold leading-snug">{p.nombre}</h3>
+        <h3 className="line-clamp-2 text-sm font-semibold leading-snug">
+          {p.nombre}
+        </h3>
         <div className="mt-auto pt-2">
           <div className="text-lg font-extrabold text-rojo">{pesos(p.precio)}</div>
           <div className="flex justify-between text-xs text-gris">
             <span>SKU {p.sku}</span>
-            <span className={agotado ? "" : "font-semibold text-verde"}>Stock {numero(p.stock)}</span>
+            <span className={agotado ? "" : "font-semibold text-verde"}>Stock {cantidad(p.stock, p.unidad)}</span>
           </div>
         </div>
       </div>

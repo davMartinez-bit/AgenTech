@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, numero, pesos, type Alternativa, type Complemento, type Producto } from "../api";
+import { api, cantidad, pesos, type Alternativa, type Complemento, type Producto } from "../api";
 
 // Ficha del producto para el vendedor: datos, "Lleva también" (venta cruzada con las ventas reales)
 // y alternativas con stock (lo más parecido por significado), clave cuando el producto está agotado.
@@ -39,7 +39,7 @@ export function Ficha({ producto, cerrar, abrir }: { producto: Producto; cerrar:
             <div className="mt-1 text-sm text-gris">SKU {producto.sku}</div>
             <div className="mt-3 text-2xl font-extrabold text-rojo">{pesos(producto.precio)}</div>
             <div className={`mt-1 font-semibold ${agotado ? "text-rojo" : "text-verde"}`}>
-              {agotado ? "Agotado" : `Stock ${numero(producto.stock)}`}
+              {agotado ? "Agotado" : `Stock ${cantidad(producto.stock, producto.unidad)}`}
             </div>
           </div>
           <button onClick={cerrar} className="self-start rounded px-2 text-gris hover:bg-fondo" aria-label="Cerrar">✕</button>
@@ -80,7 +80,7 @@ function Mini({ p, nota, abrir }: { p: Producto; nota: string; abrir: (p: Produc
       </div>
       <div className="min-w-0">
         <div className="truncate text-sm font-semibold">{p.nombre}</div>
-        <div className="text-sm font-bold text-rojo">{pesos(p.precio)} <span className="font-normal text-gris">· stock {numero(p.stock)}</span></div>
+        <div className="text-sm font-bold text-rojo">{pesos(p.precio)} <span className="font-normal text-gris">· stock {cantidad(p.stock, p.unidad)}</span></div>
         <div className="text-xs text-gris">{nota}</div>
       </div>
     </button>

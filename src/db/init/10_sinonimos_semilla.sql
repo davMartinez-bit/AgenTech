@@ -987,5 +987,34 @@ INSERT INTO sinonimos_busqueda (frase, equivale, tipo, nota) VALUES
     ('cuanto cuestan', '', 'relleno', 'Pregunta por el precio'),
     ('a cuanto', '', 'relleno', 'Pregunta por el precio'),
     ('en stock', '', 'relleno', 'Pregunta por el stock'),
-    ('disponible', '', 'relleno', 'Pregunta por el stock')
+    ('disponible', '', 'relleno', 'Pregunta por el stock'),
+    -- T33/T32: "forrar" un mueble es tapizarlo; forrar botones es otra cosa.
+    ('forrar', 'tapizar', 'sinonimo', 'Forrar un mueble es tapizarlo'),
+    ('forrar botones', 'forrar botones', 'sinonimo', 'Nombre de la máquina y las matrices de forrar botones'),
+    ('forrar boton', 'forrar botones', 'sinonimo', 'Singular de forrar botones'),
+    ('maquina forrar', 'maquina forrar botones', 'sinonimo', 'Máquina de forrar botones'),
+    ('maquina para forrar', 'maquina forrar botones', 'sinonimo', 'Máquina de forrar botones'),
+    ('matriz forrar', 'matriz forrar botones', 'sinonimo', 'Matriz de forrar botones'),
+    ('matriz para forrar', 'matriz forrar botones', 'sinonimo', 'Matriz de forrar botones'),
+    ('forrar por debajo', 'tafetan forro', 'sinonimo', 'Forro interior, no tapizado'),
+    ('retapizar', 'tapizar', 'sinonimo', 'Retapizar es tapizar de nuevo'),
+    ('tapisar', 'tapizar', 'escritura', 'Error frecuente'),
+    ('forar', 'forrar', 'escritura', 'Error frecuente'),
+    ('tela', 'tela tapizar', 'sinonimo', 'Tela sola suele buscarse para tapizar'),
+    -- T34: el oficio lleva a su rubro (lo que pide un electricista está en Electricidad).
+    ('electricista', 'electricidad', 'sinonimo', 'Oficio que lleva al rubro Electricidad'),
+    ('gasfiter', 'gasfiteria', 'sinonimo', 'Oficio que lleva al rubro Gasfitería'),
+    ('gasfitero', 'gasfiteria', 'sinonimo', 'Oficio que lleva al rubro Gasfitería'),
+    ('plomero', 'gasfiteria', 'sinonimo', 'Oficio que lleva al rubro Gasfitería'),
+    ('fontanero', 'gasfiteria', 'sinonimo', 'Oficio que lleva al rubro Gasfitería'),
+    ('plomeria', 'gasfiteria', 'sinonimo', 'Oficio que lleva al rubro Gasfitería'),
+    ('tapicero', 'tapiceria', 'sinonimo', 'Oficio que lleva al rubro Tapicería'),
+    ('pintor', 'pintura', 'sinonimo', 'Oficio que lleva al rubro Pintura'),
+    ('mueblista', 'muebleria', 'sinonimo', 'Oficio que lleva al rubro Mueblería'),
+    ('cerrajero', 'cerradura', 'sinonimo', 'Oficio que lleva al rubro Cerraduras'),
+    ('jardinero', 'jardin', 'sinonimo', 'Oficio que lleva al rubro Jardín'),
+    -- En Chile la cerámica de piso o muro se pide como palmeta, baldosa o azulejo.
+    ('palmeta', 'ceramica', 'sinonimo', 'Otro nombre de la cerámica'),
+    ('baldosa', 'ceramica', 'sinonimo', 'Otro nombre de la cerámica'),
+    ('azulejo', 'ceramica', 'sinonimo', 'Otro nombre de la cerámica')
 ON CONFLICT (frase) DO UPDATE SET equivale = EXCLUDED.equivale, tipo = EXCLUDED.tipo, nota = EXCLUDED.nota;
