@@ -20,6 +20,11 @@ export const config = {
   modeloEmbedding: process.env.EMBEDDING_MODEL ?? "nomic-embed-text-v2-moe",
   // Modelo de lenguaje del agente que interpreta los gráficos del panel administrativo.
   modeloAgente: process.env.AGENT_MODEL ?? "qwen2.5:7b",
+  // Modelo chico y rápido con que el asistente traduce lo que dijo el cliente a búsquedas cortas.
+  modeloInterprete: process.env.INTERPRETE_MODEL ?? "gemma3:4b",
+  // Modelo que redacta la sugerencia del asistente. El mismo modelo chico: cabe junto al de embeddings
+  // en una tarjeta gráfica de 6 GB y no hay que cargar otro modelo en cada pregunta.
+  modeloRespuesta: process.env.RESPUESTA_MODEL ?? "gemma3:4b",
   // Umbral y peso fijados con src/worker/evaluar_busqueda.py (03-11-2026).
   similitudMinima: Number(process.env.SIMILITUD_MINIMA ?? 0.32),
   pesoTexto: Number(process.env.PESO_TEXTO ?? 0.15),

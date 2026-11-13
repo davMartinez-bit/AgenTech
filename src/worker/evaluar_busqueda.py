@@ -25,7 +25,8 @@ K = 5
 PESOS = [0.0, 0.15, 0.35]
 # Consultas que no tienen nada que ver con una ferretería: deben volver vacías.
 AJENAS = ["pizza napolitana", "pasaje en bus a Valparaíso", "seguro de auto", "zapatillas de running",
-          "clases de guitarra", "receta de empanadas", "celular samsung nuevo", "arriendo de departamento"]
+          "clases de guitarra", "receta de empanadas", "celular samsung nuevo", "arriendo de departamento",
+          "domotica", "notebook gamer", "corte de pelo para hombre", "veterinaria para mi perro", "pasaje de avion a santiago"]
 
 
 def grupo(descripcion):

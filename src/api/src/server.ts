@@ -13,6 +13,7 @@ import { rutaAlertas } from "./rutas/alertas.js";
 import { rutaConsulta } from "./rutas/consulta.js";
 import { rutaIngesta } from "./rutas/ingesta.js";
 import { rutaProductos } from "./rutas/productos.js";
+import { rutaRespuesta } from "./rutas/respuesta.js";
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const especificacion = YAML.parse(readFileSync(join(aqui, "..", "openapi.yaml"), "utf-8"));
@@ -29,7 +30,7 @@ app.get("/openapi.json", (_req, res) => res.json(especificacion));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));
 if (config.fotosDir) app.use("/fotos", express.static(config.fotosDir, { maxAge: "1d" }));
 
-app.use(rutaIngesta, rutaConsulta, rutaProductos, rutaAdmin, rutaAlertas);
+app.use(rutaIngesta, rutaConsulta, rutaRespuesta, rutaProductos, rutaAdmin, rutaAlertas);
 
 // Si los paneles están compilados (src/web/dist), la API también los sirve en local.
 const web = join(aqui, "..", "..", "web", "dist");

@@ -3,6 +3,7 @@
 import assert from "node:assert/strict";
 import type { AddressInfo } from "node:net";
 import { after, before, describe, test } from "node:test";
+import { config } from "../src/config.js";
 import { pool } from "../src/db.js";
 import { hechos } from "../src/rutas/admin.js";
 import { cifrasInventadas, clasificar } from "../src/rutas/alertas.js";
@@ -81,10 +82,30 @@ describe("POST /consulta", () => {
     assert.equal(estado, 200);
     assert.ok(datos.resultados.length > 0);
     for (const r of datos.resultados) {
-      assert.deepEqual(Object.keys(r).sort(), ["categoria", "foto", "nombre", "precio", "score", "sku", "stock"]);
+      assert.deepEqual(Object.keys(r).sort(), ["categoria", "foto", "nombre", "precio", "score", "sku", "stock", "unidad"]);
       assert.ok(r.stock > 0);
     }
     assert.match(datos.resultados[0].nombre, /huincha/i);
+  });
+
+  test("el buscador no usa las frases de cliente y el asistente sí", async () => {
+    const buscador = await post("/consulta", { texto: "reparación de techo", limite: 5 });
+    assert.equal(buscador.estado, 200);
+    assert.equal(buscador.datos.origen, "buscador", "sin origen, la consulta es del buscador");
+    const asistente = await post("/consulta", { texto: "se me llueve el techo de zinc y necesito taparlo", limite: 5, origen: "asistente" });
+    assert.equal(asistente.estado, 200);
+    assert.equal(asistente.datos.origen, "asistente");
+    assert.ok(asistente.datos.resultados.length > 0, "el asistente encuentra algo para un problema contado");
+    const malo = await post("/consulta", { texto: "techo", origen: "otro" });
+    assert.equal(malo.estado, 400);
+  });
+
+  test("el buscador entiende una tarea corta y mezcla los productos que se usan", async () => {
+    const { estado, datos } = await post("/consulta", { texto: "pintar muros", limite: 6 });
+    assert.equal(estado, 200);
+    const nombres = datos.resultados.map((r: { nombre: string }) => r.nombre.toLowerCase()).join(" | ");
+    for (const palabra of ["latex", "rodillo", "brocha"]) assert.match(nombres, new RegExp(palabra), palabra);
+    assert.deepEqual(datos.interpretacion, [], "el buscador no usa el modelo de lenguaje");
   });
 
   test("una búsqueda ajena a la ferretería vuelve vacía, sin error", async () => {
@@ -127,6 +148,48 @@ describe("POST /consulta", () => {
     assert.equal(estado, 400);
     assert.equal(datos.error.codigo, "solicitud_invalida");
   });
+
+  test("con el modelo de embeddings arriba la búsqueda es semántica", async () => {
+    const { estado, datos } = await post("/consulta", { texto: "pegamento para madera", limite: 5 });
+    assert.equal(estado, 200);
+    assert.equal(datos.modo, "semantica");
+  });
+
+  test("sin el modelo de embeddings la búsqueda sigue por palabras y la consulta queda sin vector", async () => {
+    const original = config.ollamaUrl;
+    config.ollamaUrl = "http://127.0.0.1:9";
+    let respuesta;
+    try {
+      respuesta = await post("/consulta", { texto: "silicona para baño", limite: 5 });
+    } finally {
+      config.ollamaUrl = original;
+    }
+    assert.equal(respuesta.estado, 200);
+    assert.equal(respuesta.datos.modo, "solo_texto");
+    assert.equal(respuesta.datos.agotado_parecido, null);
+    const { rows } = await pool.query("SELECT embedding IS NULL AS sin_vector FROM consultas WHERE id = $1", [respuesta.datos.consulta_id]);
+    assert.deepEqual(rows[0], { sin_vector: true });
+  });
+});
+
+describe("POST /consulta/:id/respuesta", () => {
+  test("una consulta inexistente responde 404", async () => {
+    const { estado, datos } = await post("/consulta/999999999/respuesta", {});
+    assert.equal(estado, 404);
+    assert.equal(datos.error.codigo, "consulta_no_encontrada");
+  });
+
+  test("redacta una sugerencia con productos de la consulta", { timeout: 90_000 }, async () => {
+    const consulta = await post("/consulta", { texto: "pegamento para madera", limite: 8 });
+    assert.ok(consulta.datos.resultados.length > 0);
+    const { estado, datos } = await post(`/consulta/${consulta.datos.consulta_id}/respuesta`, {});
+    assert.equal(estado, 200);
+    assert.deepEqual(Object.keys(datos).sort(), ["consulta_id", "ejemplos", "generada", "latencia_ms", "modelo", "recomendados", "respuesta"]);
+    assert.ok(datos.respuesta.trim().length > 0);
+    const skus = consulta.datos.resultados.map((r: any) => r.sku);
+    assert.ok(datos.recomendados.length <= 3);
+    for (const r of datos.recomendados) assert.ok(skus.includes(r.sku), `${r.sku} no estaba en los resultados`);
+  });
 });
 
 describe("recomendaciones", () => {
@@ -166,7 +229,7 @@ describe("avisos de inventario", () => {
   const producto = {
     sku: "X1", nombre: "Producto de prueba", categoria: null, precio: 1000, stock_bsale: 5, vendido_desde_corte: 0, stock_estimado: 5,
     unidades_30: 30, unidades_30_previos: 10, unidades_90: 60, total_90: 60000, unidades_365: 100,
-    dias_sin_vender: 1, dias_sin_comprar: null,
+    dias_sin_vender: 1, dias_sin_comprar: null, unidad: "unidad",
   };
 
   test("avisa cuando el stock alcanza para pocos días y sugiere cuánto comprar", () => {
@@ -176,6 +239,17 @@ describe("avisos de inventario", () => {
     assert.equal(a.datos.dias_alcanza, 5);
     assert.equal(a.datos.comprar, 25);
     assert.ok(a.aviso.includes("Se está vendiendo más"));
+  });
+
+  test("con unidad de metro, las cantidades llevan la abreviatura y la compra dice 'unos'", () => {
+    const metro = clasificar({ ...producto, unidad: "metro" }, false)!;
+    assert.equal(metro.tipo, "por_agotarse");
+    assert.ok(metro.accion.includes("Compra unos"));
+    assert.ok(metro.accion.includes(" m "));
+    assert.ok(metro.aviso.includes(" m"));
+    assert.equal(metro.unidad, "metro");
+    const unidad = clasificar(producto, false)!;
+    assert.ok(unidad.accion.startsWith("Compra unas"));
   });
 
   test("distingue el agotado que se vendía, el olvidado y el stock parado", () => {

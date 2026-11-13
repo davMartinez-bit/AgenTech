@@ -34,10 +34,11 @@ export const GRAFICOS: Record<string, Grafico> = {
   productos_mas_vendidos: {
     titulo: "Productos más vendidos (últimos 90 días)",
     descripcion: "Los 10 productos con más pesos vendidos y su stock actual.",
-    sql: `SELECT v.sku, v.nombre, sum(v.unidades) AS unidades, sum(v.total) AS total, p.stock
+    sql: `SELECT v.sku, v.nombre, sum(v.unidades) AS unidades, sum(v.total) AS total, p.stock,
+                 unidad_venta(p.nombre, p.permite_decimal, p.unidad_medida) AS unidad
           FROM ventas_por_producto v JOIN productos p ON p.id = v.producto_id
           WHERE v.dia >= current_date - 90
-          GROUP BY v.sku, v.nombre, p.stock ORDER BY total DESC LIMIT 10`,
+          GROUP BY v.sku, v.nombre, p.stock, p.nombre, p.permite_decimal, p.unidad_medida ORDER BY total DESC LIMIT 10`,
   },
   riesgo_quiebre: {
     titulo: "Riesgo de quiebre de stock",

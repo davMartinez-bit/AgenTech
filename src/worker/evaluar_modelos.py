@@ -116,6 +116,19 @@ CASOS = [
     ("relleno pa cojin", "Por uso: rellenos", "(espuma|napa|algodon|molido)"),
     ("pa nivelar la ceramica del piso", "Por uso: separadores y cuñas", "(separador|cuña|cuna)"),
     ("pegamento pa tubos de pvc", "Por uso: adhesivo PVC", "adhesivo pvc"),
+    # Reportadas por Tomás el 11-11: "forrar" está en el nombre de la máquina de forrar botones.
+    ("forrar sillon", "Por uso: telas para tapizar", "^(felpa|chenille|lino|cuerina|pu eco|pu messina|gabana|charles|polilona|diegoti)"),
+    ("hay para forrar un sillon?", "Por uso: telas para tapizar", "^(felpa|chenille|lino|cuerina|pu eco|pu messina|gabana|charles|polilona|diegoti)"),
+    ("no pero necesito telas para forrar", "Por uso: telas para tapizar", "^(felpa|chenille|lino|cuerina|pu eco|pu messina|gabana|charles|polilona|diegoti)"),
+    # Como escribe el vendedor (T34): oficios y palabras mal escritas que no están en el nombre de un producto.
+    ("electricista", "Oficios: electricidad", "^(enchufe|interruptor|cable paralelo|cinta aisladora|canaleta electrica|soquete|ampolleta|foco|probador corriente|tubo conduit|caja (chuqui|tabique)|adaptador schuko|set electrico|curva conduit|copla conduit|abrazadera conduit|salida de)"),
+    ("eletrcista", "Oficios: electricidad mal escrito", "^(enchufe|interruptor|cable paralelo|cinta aisladora|canaleta electrica|soquete|ampolleta|foco|probador corriente|tubo conduit|caja (chuqui|tabique)|adaptador schuko|set electrico|curva conduit|copla conduit|abrazadera conduit|salida de)"),
+    ("eletricidad", "Oficios: electricidad mal escrito", "^(enchufe|interruptor|cable paralelo|cinta aisladora|canaleta electrica|soquete|ampolleta|foco|probador corriente|tubo conduit|caja (chuqui|tabique)|adaptador schuko|set electrico|curva conduit|copla conduit|abrazadera conduit|salida de)"),
+    ("gasfiter", "Oficios: gasfitería", "^(teflon|flexible|llave (gasfiter|jardin)|set (ducha|instalacion|riego)|soporte ducha|manguera|adhesivo pvc|union manguera|conector|regulador gas)"),
+    ("tapicero", "Oficios: tapicería", "^(felpa|chenille|lino|cuerina|pu eco|gabana|charles|polilona|corchete|espuma|napa|huincha tapicera|hilo|tacha|chinche tapicero|pasamaneria|pasameneria|boton|cierre|velcro|aguja|tijera|tiza|maquina forrar|matriz forrar|carrito)"),
+    ("tapizeria", "Oficios: tapicería mal escrito", "^(felpa|chenille|lino|cuerina|pu eco|gabana|charles|polilona|corchete|espuma|napa|huincha tapicera|hilo|tacha|chinche tapicero|pasamaneria|pasameneria|boton|cierre|velcro|aguja|tijera|tiza|maquina forrar|matriz forrar|carrito)"),
+    ("pintor", "Oficios: pinturas", "^(brocha|rodillo|esmalte|latex|pintura|bandeja pintura|anticorrosivo|barniz|diluyente|aguarras|pasta muro|cinta masking|espatula|lija)"),
+    ("quiero tapisar las sillas del comedor", "Oficios: tapicería mal escrito", "^(felpa|chenille|lino|cuerina|pu eco|gabana|charles|polilona|diegoti)"),
 ]
 
 # Validación a ciegas (T30): consultas escritas sin ver el diccionario de sinónimos ni los casos de arriba.
@@ -213,6 +226,51 @@ CASOS_VALIDACION_2 = [
     ("wena cabros, tendran cinta embalaje transparente pa la mudanza po", "Validación a ciegas 2: con relleno", "^cinta embalaje transparente"),
 ]
 
+# Tercera validación a ciegas (T32): consultas largas por uso, escritas mirando solo los nombres del
+# catálogo, sin ver las descripciones ni el diccionario. El cliente cuenta el problema y no nombra el producto.
+CASOS_VALIDACION_3 = [
+    ("se rompió la manguerita que va del balón a la cocina y hay olor, necesito cambiarla", "Validación a ciegas 3: por uso", "^(manguera|flexible) gas"),
+    ("el agua sale para todos lados porque se picó el tubo metálico de la regadera del baño", "Validación a ciegas 3: por uso", "^(flexible|set) ducha"),
+    ("quiero colgar un espejo pesado en una pared de volcanita y no sé con qué afirmarlo", "Validación a ciegas 3: por uso", "^tarugo (paloma|autoroscante)"),
+    ("se me corta la luz cuando prendo el hervidor, quiero revisar si llega electricidad al muro", "Validación a ciegas 3: por uso", "^probador corriente"),
+    ("la puerta del mueble de cocina se abre sola, quiero algo que la deje pegada al cerrar", "Validación a ciegas 3: por uso", "^reten"),
+    ("la llave del lavaplatos gotea por la rosca, con qué la envuelvo para que selle", "Validación a ciegas 3: por uso", "^teflon agua"),
+    ("quedaron manchas de cemento y sarro en las baldosas del patio, con qué las saco", "Validación a ciegas 3: por uso", "^acido muriatico"),
+    ("quiero unir dos tablas de pino por el canto para armar la cubierta de una mesa", "Validación a ciegas 3: por uso", "^colafria"),
+    ("cuando llueve entra agua por las junturas del marco de la ventana de aluminio", "Validación a ciegas 3: por uso", "^(silicona (neutra|acetica|acrilico|poliuretano)|pistola calafatera)"),
+    ("tengo un enredo detrás del computador, quiero juntar todo y dejarlo ordenado", "Validación a ciegas 3: por uso", "^amarra plastica"),
+    ("voy a pintar el living y no quiero manchar los marcos ni los guardapolvos", "Validación a ciegas 3: por uso", "^cinta masking"),
+    ("estoy cambiando el género del asiento de una silla de comedor, con qué lo afirmo a la madera por debajo", "Validación a ciegas 3: por uso", "^(corchete|corchetera|engrapadora|chinche tapicero|tacha)"),
+    ("busco un género grueso que parezca cuero para forrar el respaldo de la cama", "Validación a ciegas 3: por uso", "^(cuerina|pu eco|pu messina)"),
+    ("quiero dar sombra en la terraza con algo liviano que igual deje pasar un poco de luz", "Validación a ciegas 3: por uso", "^malla raschel"),
+    ("tengo que cerrar el gallinero para que no se me escapen las gallinas", "Validación a ciegas 3: por uso", "^malla hexagonal"),
+    ("la de regar el pasto me quedó corta y quiero juntarla con otra que tengo guardada", "Validación a ciegas 3: por uso", "^(union|conector) manguera"),
+    ("quiero que el mueble de la tele se pueda mover fácil cuando hago aseo", "Validación a ciegas 3: por uso", "^rueda (giratoria|fija|silicona|con)"),
+    ("el portón de corredera se atasca, hay que cambiarle lo que gira por abajo", "Validación a ciegas 3: por uso", "^rueda porton"),
+    ("quiero dejar con seguro la bodega del patio para que no se metan a robar", "Validación a ciegas 3: por uso", "^(portacandado|candado|picaporte)"),
+    ("el control de la tele no responde bien, tiene la placa sucia por dentro, con qué la limpio", "Validación a ciegas 3: por uso", "^(limpia contacto|alcohol isopropilico)"),
+    ("necesito llevar corriente hasta el quincho, voy a armar un alargador de diez metros", "Validación a ciegas 3: por uso", "^(cable paralelo|enchufe (macho|hembra))"),
+    ("voy a poner palmetas en el baño y quiero que queden todas a la misma distancia", "Validación a ciegas 3: por uso", "^(separador (ceramica|nivelador)|cuna nivelacion)"),
+    ("ya pegué las palmetas del piso, ahora me falta rellenar las líneas entre una y otra", "Validación a ciegas 3: por uso", "^(frague|fraguador)"),
+    ("necesito marcar una línea larga y derecha en el piso para levantar un tabique", "Validación a ciegas 3: por uso", "^(tizador|lienza|tiza)"),
+    ("quiero saber si el mueble quedó derecho antes de apretar los tornillos", "Validación a ciegas 3: por uso", "^nivel"),
+    ("tengo que botar los restos de la demolición del baño, en qué los echo", "Validación a ciegas 3: por uso", "^saco escombro"),
+    ("hay ratones en la bodega y no quiero usar veneno por los niños", "Validación a ciegas 3: por uso", "^trampa raton"),
+    ("la pintura al óleo de la reja me quedó muy espesa, con qué la adelgazo", "Validación a ciegas 3: por uso", "^(aguarras|diluyente sintetico)"),
+    ("compré pintura blanca para la pieza y la quiero dejar color damasco, qué le agrego", "Validación a ciegas 3: por uso", "^(concentrado|tierra color)"),
+    ("los rodamientos del carro de arrastre suenan, hay que echarles algo espeso", "Validación a ciegas 3: por uso", "^grasa consistente"),
+    ("la de coser está dura y suena al pedalear, qué le pongo para que ande suave", "Validación a ciegas 3: por uso", "^aceite (maquina|singer)"),
+    ("necesito apretar dos tablas una contra otra mientras se seca el pegamento", "Validación a ciegas 3: por uso", "^prensa"),
+    ("tengo que envolver los muebles para que no se rayen en el camión de la mudanza", "Validación a ciegas 3: por uso", "^(film|bistrech)"),
+    ("hice un hoyo en la cubierta del escritorio para pasar los cargadores y quedó feo, cómo lo termino", "Validación a ciegas 3: por uso", "^pasacable"),
+    ("quiero que la puerta del mueble abra empujándola, sin ponerle nada por fuera", "Validación a ciegas 3: por uso", "^push open"),
+    ("cuando corto fierro me saltan chispas a los ojos, necesito cubrirme entero", "Validación a ciegas 3: por uso", "^careta facial"),
+    ("quiero colgar una hamaca de una viga de madera, qué le atornillo para engancharla", "Validación a ciegas 3: por uso", "^(cancamo|mosqueton|gancho colgar)"),
+    ("tengo que fijar las planchas de zinc a las costaneras de madera", "Validación a ciegas 3: por uso", "^tornillo hex.techo"),
+    ("el esmeril angular tira chispas por atrás y perdió fuerza, qué repuesto le cambio", "Validación a ciegas 3: por uso", "^carbon soeg"),
+    ("corté la melamina y quedó el borde café a la vista, con qué lo cubro", "Validación a ciegas 3: por uso", "^tapacanto"),
+]
+
 
 def sin_tildes(t):
     return "".join(c for c in unicodedata.normalize("NFD", t) if unicodedata.category(c) != "Mn")
@@ -221,7 +279,7 @@ def sin_tildes(t):
 def cargar_casos(con):
     productos = con.execute("SELECT id, nombre FROM productos WHERE activo").fetchall()
     with con.cursor() as cur:
-        for consulta, descripcion, regex in CASOS + CASOS_VALIDACION + CASOS_VALIDACION_2:
+        for consulta, descripcion, regex in CASOS + CASOS_VALIDACION + CASOS_VALIDACION_2 + CASOS_VALIDACION_3:
             cur.execute(
                 """INSERT INTO casos_prueba (consulta, descripcion) VALUES (%s, %s)
                    ON CONFLICT (consulta) DO UPDATE SET descripcion = EXCLUDED.descripcion RETURNING id""",

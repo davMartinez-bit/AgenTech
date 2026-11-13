@@ -52,6 +52,7 @@ rutaProductos.get("/productos", async (req, res) => {
 
   const filas = await consultar(
     `SELECT p.sku, p.nombre, c.nombre AS categoria, m.nombre AS marca, p.precio, p.stock, p.unidad_medida,
+            unidad_venta(p.nombre, p.permite_decimal, p.unidad_medida) AS unidad,
             count(*) OVER () AS total
      FROM productos p
      LEFT JOIN categorias c ON c.id = p.categoria_id
@@ -72,7 +73,8 @@ rutaProductos.get("/productos", async (req, res) => {
 rutaProductos.get("/productos/:sku", async (req, res) => {
   const [p] = await consultar(
     `SELECT p.sku, p.codigo_barras, p.nombre, p.descripcion, c.nombre AS categoria, m.nombre AS marca,
-            p.precio, p.stock, p.unidad_medida, p.permite_decimal, p.actualizado_en
+            p.precio, p.stock, p.unidad_medida, p.permite_decimal, p.actualizado_en,
+            unidad_venta(p.nombre, p.permite_decimal, p.unidad_medida) AS unidad
      FROM productos p
      LEFT JOIN categorias c ON c.id = p.categoria_id
      LEFT JOIN marcas m ON m.id = p.marca_id
@@ -88,7 +90,8 @@ const limite = z.coerce.number().int().min(1).max(12).default(4);
 // Alternativas con stock (lo más parecido por significado): para ofrecer cuando el producto está agotado.
 rutaProductos.get("/productos/:sku/alternativas", async (req, res) => {
   const filas = await consultar(
-    "SELECT sku, nombre, categoria, precio, stock, similitud FROM productos_alternativos($1, $2)",
+    `SELECT a.*, (SELECT unidad_venta(p.nombre, p.permite_decimal, p.unidad_medida) FROM productos p WHERE p.sku = a.sku) AS unidad
+     FROM productos_alternativos($1, $2) a`,
     [req.params.sku, limite.parse(req.query.limite)],
   );
   res.json(filas.map((p) => ({ ...p, similitud: Math.round(p.similitud * 1000) / 1000, foto: urlFoto(p.sku) })));
@@ -97,7 +100,8 @@ rutaProductos.get("/productos/:sku/alternativas", async (req, res) => {
 // Venta cruzada: lo que otros clientes llevaron en la misma boleta o factura (ventas reales de Bsale).
 rutaProductos.get("/productos/:sku/complementos", async (req, res) => {
   const filas = await consultar(
-    "SELECT sku, nombre, categoria, precio, stock, veces_juntos, confianza FROM productos_complementarios($1, $2)",
+    `SELECT a.*, (SELECT unidad_venta(p.nombre, p.permite_decimal, p.unidad_medida) FROM productos p WHERE p.sku = a.sku) AS unidad
+     FROM productos_complementarios($1, $2) a`,
     [req.params.sku, limite.parse(req.query.limite)],
   );
   res.json(filas.map((p) => ({ ...p, confianza: Math.round(p.confianza * 100) / 100, foto: urlFoto(p.sku) })));
