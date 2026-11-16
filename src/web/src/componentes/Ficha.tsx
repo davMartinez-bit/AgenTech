@@ -25,8 +25,8 @@ export function Ficha({ producto, cerrar, abrir }: { producto: Producto; cerrar:
   );
 
   return (
-    <div className="fixed inset-0 z-40 grid place-items-center bg-negro/60 p-4" onClick={cerrar}>
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+    <div className="anim-aparecer fixed inset-0 z-40 grid place-items-center bg-negro/60 p-4" onClick={cerrar}>
+      <div className="anim-crecer max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex gap-5 p-5">
           <div className={`h-40 w-40 shrink-0 overflow-hidden rounded-xl bg-fondo ${agotado ? "grayscale" : ""}`}>
             {producto.foto ? <img src={producto.foto} alt="" className="h-full w-full object-cover" /> : (
@@ -42,7 +42,7 @@ export function Ficha({ producto, cerrar, abrir }: { producto: Producto; cerrar:
               {agotado ? "Agotado" : `Stock ${cantidad(producto.stock, producto.unidad)}`}
             </div>
           </div>
-          <button onClick={cerrar} className="self-start rounded px-2 text-gris hover:bg-fondo" aria-label="Cerrar">✕</button>
+          <button onClick={cerrar} className="self-start rounded px-2 text-gris transition active:scale-95 hover:bg-fondo" aria-label="Cerrar">✕</button>
         </div>
 
         <div className="space-y-4 border-t border-borde bg-fondo/50 p-5">
@@ -72,7 +72,7 @@ function Seccion({ titulo, acento, children }: { titulo: string; acento?: boolea
 
 function Mini({ p, nota, abrir }: { p: Producto; nota: string; abrir: (p: Producto) => void }) {
   return (
-    <button onClick={() => abrir(p)} className="flex items-center gap-3 rounded-xl border border-borde bg-white p-2 text-left hover:border-cobre">
+    <button onClick={() => abrir(p)} className="flex items-center gap-3 rounded-xl border border-borde bg-white p-2 text-left transition duration-200 active:scale-95 hover:border-cobre hover:shadow-md">
       <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-fondo">
         {p.foto ? <img src={p.foto} alt="" className="h-full w-full object-cover" /> : (
           <div className="grid h-full place-items-center font-black text-borde">{p.nombre.slice(0, 1)}</div>

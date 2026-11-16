@@ -3,6 +3,7 @@ import { api, cantidad, pesos, type Producto, type ResultadoConsulta } from "../
 import { Chatbot } from "../componentes/Chatbot";
 import { Encabezado } from "../componentes/Encabezado";
 import { Ficha } from "../componentes/Ficha";
+import { useParallax } from "../movimiento";
 
 // Panel del vendedor: el mismo catálogo del e-commerce (foto, precio, stock) más la búsqueda
 // semántica ("como lo dice el cliente") y el chatbot.
@@ -22,6 +23,7 @@ export function Vendedor({ salir }: { salir: () => void }) {
   const [error, setError] = useState("");
   const [chatAbierto, setChatAbierto] = useState(false);
   const [ficha, setFicha] = useState<Producto | null>(null);
+  const heroe = useParallax<HTMLElement>({ origen: "inicio", puntero: true });
 
   useEffect(() => {
     api.categorias().then(setCategorias).catch(() => {});
@@ -68,22 +70,25 @@ export function Vendedor({ salir }: { salir: () => void }) {
   const paginas = Math.ceil(catalogo.total / 24);
 
   return (
-    <div className="min-h-screen">
-      <Encabezado titulo="Panel del vendedor" salir={salir}>
-        <button onClick={() => setChatAbierto(true)} className="rounded-lg bg-cobre px-4 py-2 text-sm font-bold text-negro hover:brightness-110">
-          Asistente
-        </button>
-      </Encabezado>
+    <div className="min-h-screen anim-aparecer">
+      <Encabezado titulo="Panel del vendedor" salir={salir} />
 
-      <section className="bg-negro pb-8 pt-4">
-        <form onSubmit={buscar} className="mx-auto max-w-3xl px-4">
+      <section ref={heroe} className="parallax bg-negro px-4 pb-10 pt-8 sm:pb-14 sm:pt-12">
+        <div aria-hidden className="capa capa-trama" />
+        <div aria-hidden className="capa capa-cobre" />
+        <div aria-hidden className="capa capa-rojo" />
+        <div className="capa-titular mx-auto mb-6 max-w-3xl text-center">
+          <h1 className="anim-subir text-3xl font-extrabold text-white sm:text-5xl">¿Qué necesita el cliente?</h1>
+          <p className="anim-subir mt-2 text-crema/75 sm:text-lg" style={{ "--i": 1 } as React.CSSProperties}>Busca por palabras, por nombre o por SKU.</p>
+        </div>
+        <form onSubmit={buscar} className="anim-subir mx-auto max-w-3xl" style={{ "--i": 2 } as React.CSSProperties}>
           <div className="mb-3 flex justify-center gap-2 text-sm">
             {(["inteligente", "nombre"] as const).map((m) => (
               <button
                 type="button"
                 key={m}
                 onClick={() => (setModo(m), setSemantica(null))}
-                className={`rounded-full px-4 py-1.5 font-semibold ${modo === m ? "bg-crema text-negro" : "text-crema/70 hover:text-crema"}`}
+                className={`rounded-full px-4 py-1.5 font-semibold transition-colors duration-200 ${modo === m ? "bg-crema text-negro" : "text-crema/70 hover:text-crema"}`}
               >
                 {m === "inteligente" ? "Por palabras" : "Por nombre o SKU"}
               </button>
@@ -94,19 +99,19 @@ export function Vendedor({ salir }: { salir: () => void }) {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               placeholder={modo === "inteligente" ? "Ej.: reparación de techo, forrado de sillones, huincha aisladora" : "Ej.: silicona, A000000001"}
-              className="w-full rounded-xl border-0 bg-white px-5 py-4 text-lg outline-none ring-cobre focus:ring-4"
+              className="w-full rounded-xl border-0 bg-white px-5 py-4 text-lg shadow-lg shadow-black/30 outline-none ring-cobre transition-shadow duration-200 focus:ring-4"
             />
-            <button className="rounded-xl bg-rojo px-6 font-bold text-white hover:bg-rojo-oscuro">Buscar</button>
+            <button className="rounded-xl bg-rojo px-6 font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-rojo-oscuro active:translate-y-0 active:scale-95">Buscar</button>
           </div>
         </form>
         {semantica?.modo === "solo_texto" && (
-          <p className="mx-auto mt-3 max-w-3xl px-4 text-center text-xs text-crema/70">
+          <p className="mx-auto mt-3 max-w-3xl text-center text-xs text-crema/70">
             Búsqueda solo por palabras: el modelo de búsqueda no está disponible.
           </p>
         )}
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="mx-auto max-w-7xl px-4 pb-28 pt-6">
         {!semantica && (
           <div className="mb-5 flex flex-wrap items-center gap-2">
             <Chip activo={!categoria} onClick={() => (setCategoria(""), setPagina(1))}>Todo</Chip>
@@ -123,7 +128,7 @@ export function Vendedor({ salir }: { salir: () => void }) {
         )}
 
         {semantica && (
-          <div className="mb-5 flex flex-wrap items-center gap-3 rounded-xl bg-crema px-4 py-3 text-sm">
+          <div className="anim-subir mb-5 flex flex-wrap items-center gap-3 rounded-xl bg-crema px-4 py-3 text-sm">
             {semantica.agotado_parecido && (
               <span className="w-full font-semibold text-rojo">
                 “{semantica.agotado_parecido.nombre}” está agotado. Estas son las alternativas con stock:
@@ -140,7 +145,7 @@ export function Vendedor({ salir }: { salir: () => void }) {
         {semantica?.se_corrigio && <p className="mb-3 text-xs text-gris">{`Mostrando resultados para "${semantica.texto_buscado}"`}</p>}
 
         {semantica && !cargando && (pareceFrase || !semantica.resultados.length) && (
-          <div className="mb-5 flex flex-wrap items-center gap-3 rounded-xl border-l-4 border-cobre bg-white px-5 py-4 shadow-sm">
+          <div className="anim-subir mb-5 flex flex-wrap items-center gap-3 rounded-xl border-l-4 border-cobre bg-white px-5 py-4 shadow-sm">
             <p className="text-sm leading-relaxed">
               ¿Es lo que te dijo el cliente? El buscador funciona mejor con pocas palabras. El asistente entiende el problema completo.
             </p>
@@ -153,20 +158,37 @@ export function Vendedor({ salir }: { salir: () => void }) {
           </div>
         )}
 
-        {error && <p className="mb-4 rounded-lg bg-rojo/10 px-4 py-3 text-rojo">{error}</p>}
-        {cargando && <p className="py-10 text-center text-gris">Buscando…</p>}
+        {error && <p className="anim-subir mb-4 rounded-lg bg-rojo/10 px-4 py-3 text-rojo">{error}</p>}
+        {cargando && (
+          <>
+            <p className="sr-only">Buscando…</p>
+            <div aria-hidden className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+              {Array.from({ length: 12 }, (_, i) => (
+                <div key={i} className="overflow-hidden rounded-xl border border-borde bg-white">
+                  <div className="esqueleto aspect-square" />
+                  <div className="space-y-2 p-3">
+                    <div className="esqueleto h-3 w-1/2 rounded" />
+                    <div className="esqueleto h-4 w-full rounded" />
+                    <div className="esqueleto h-5 w-2/3 rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
         {!cargando && semantica && !semantica.resultados.length && (
-          <p className="rounded-xl bg-white px-6 py-10 text-center text-gris">
+          <p className="anim-subir rounded-xl bg-white px-6 py-10 text-center text-gris">
             No encontramos productos con stock para esas palabras. Prueba con otras o pregúntale al asistente.
           </p>
         )}
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
           {!cargando &&
-            productos.map((p) => (
+            productos.map((p, i) => (
               <Tarjeta
                 key={p.sku}
                 p={p}
+                orden={i}
                 abrir={() => (semantica && api.clic(semantica.consulta_id, p.sku, "buscador"), setFicha(p))}
               />
             ))}
@@ -174,19 +196,28 @@ export function Vendedor({ salir }: { salir: () => void }) {
 
         {!semantica && paginas > 1 && (
           <div className="mt-8 flex items-center justify-center gap-3">
-            <button disabled={pagina === 1} onClick={() => setPagina(pagina - 1)} className="rounded-lg bg-white px-4 py-2 disabled:opacity-40">
+            <button
+              disabled={pagina === 1}
+              onClick={() => (setPagina(pagina - 1), window.scrollTo({ top: 0 }))}
+              className="rounded-lg bg-white px-4 py-2 transition hover:shadow active:scale-95 disabled:opacity-40"
+            >
               Anterior
             </button>
             <span className="text-sm text-gris">
               Página {pagina} de {paginas} · {catalogo.total} productos
             </span>
-            <button disabled={pagina >= paginas} onClick={() => setPagina(pagina + 1)} className="rounded-lg bg-white px-4 py-2 disabled:opacity-40">
+            <button
+              disabled={pagina >= paginas}
+              onClick={() => (setPagina(pagina + 1), window.scrollTo({ top: 0 }))}
+              className="rounded-lg bg-white px-4 py-2 transition hover:shadow active:scale-95 disabled:opacity-40"
+            >
               Siguiente
             </button>
           </div>
         )}
       </main>
 
+      <BurbujaAsistente oculta={chatAbierto} abrir={() => setChatAbierto(true)} />
       <Chatbot
         abierto={chatAbierto}
         cerrar={() => setChatAbierto(false)}
@@ -199,27 +230,63 @@ export function Vendedor({ salir }: { salir: () => void }) {
   );
 }
 
+// Burbuja flotante abajo a la derecha que despliega el chat. Se esconde mientras el chat está abierto.
+function BurbujaAsistente({ oculta, abrir }: { oculta: boolean; abrir: () => void }) {
+  return (
+    <button
+      onClick={abrir}
+      aria-label="Abrir el asistente"
+      tabIndex={oculta ? -1 : 0}
+      className={`group fixed bottom-5 right-5 z-20 flex items-center rounded-full bg-negro p-1.5 text-cobre shadow-xl shadow-black/40 ring-2 ring-cobre transition duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-95 sm:bottom-7 sm:right-7 ${oculta ? "pointer-events-none scale-0 opacity-0" : ""}`}
+    >
+      <span aria-hidden className="halo absolute inset-0 rounded-full ring-2 ring-cobre" />
+      <span className="relative grid h-14 w-14 place-items-center rounded-full bg-linear-to-br from-carbon to-negro sm:h-16 sm:w-16">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden className="h-9 w-9 sm:h-10 sm:w-10">
+          {/* antena */}
+          <path d="M16 3.5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="16" cy="3" r="1.8" fill="currentColor" />
+          {/* cabeza con forma de globo de conversación */}
+          <path
+            d="M8 7h16a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5h-6l-5.2 4.2c-.7.5-1.6 0-1.6-.8V25H8a5 5 0 0 1-5-5v-8a5 5 0 0 1 5-5z"
+            fill="currentColor"
+          />
+          {/* ojos que parpadean y sonrisa */}
+          <g className="parpadeo">
+            <circle cx="11.5" cy="15" r="2.1" fill="#111111" />
+            <circle cx="20.5" cy="15" r="2.1" fill="#111111" />
+          </g>
+          <path d="M12.5 19.8c1 .9 2.2 1.3 3.5 1.3s2.5-.4 3.5-1.3" stroke="#111111" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      </span>
+      <span className="relative max-w-0 overflow-hidden whitespace-nowrap text-sm font-bold text-crema transition-all duration-300 group-hover:max-w-44 group-hover:pl-2 group-hover:pr-4 group-focus-visible:max-w-44 group-focus-visible:pl-2 group-focus-visible:pr-4">
+        Pregúntale al asistente
+      </span>
+    </button>
+  );
+}
+
 function Chip({ activo, onClick, children }: { activo: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 text-sm ${activo ? "border-negro bg-negro text-white" : "border-borde bg-white hover:border-negro"}`}
+      className={`rounded-full border px-3 py-1 text-sm transition-colors duration-200 active:scale-95 ${activo ? "border-negro bg-negro text-white" : "border-borde bg-white hover:border-negro"}`}
     >
       {children}
     </button>
   );
 }
 
-function Tarjeta({ p, abrir }: { p: Producto & { score?: number }; abrir: () => void }) {
+function Tarjeta({ p, orden, abrir }: { p: Producto & { score?: number }; orden: number; abrir: () => void }) {
   const agotado = p.stock <= 0;
   return (
     <article
       onClick={abrir}
-      className={`flex cursor-pointer flex-col overflow-hidden rounded-xl border border-borde bg-white transition hover:-translate-y-0.5 hover:shadow-md ${agotado ? "opacity-60 grayscale" : ""}`}
+      style={{ "--i": Math.min(orden, 11) } as React.CSSProperties}
+      className={`group anim-subir flex cursor-pointer flex-col overflow-hidden rounded-xl border border-borde bg-white transition duration-300 hover:-translate-y-1 hover:border-cobre hover:shadow-xl ${agotado ? "opacity-60 grayscale" : ""}`}
     >
-      <div className="relative aspect-square bg-fondo">
+      <div className="relative aspect-square overflow-hidden bg-fondo">
         {p.foto ? (
-          <img src={p.foto} alt={p.nombre} loading="lazy" className="h-full w-full object-cover" />
+          <img src={p.foto} alt={p.nombre} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
         ) : (
           <div className="grid h-full place-items-center text-4xl font-black text-borde">{p.nombre.slice(0, 1)}</div>
         )}

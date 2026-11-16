@@ -13,8 +13,93 @@
   --color-borde: #d9d9d6;
   --color-fondo: #f3f2ee;
   --color-verde: #1fa855;
+  --color-gris-oscuro: #4a4a4a;
+  --color-verde-oscuro: #15803d;
 }
 
 body {
   @apply bg-fondo text-negro font-sans antialiased;
+}
+
+/* Panel del administrador: letra más grande en pantallas anchas, para que se lea proyectado en una sala. */
+@media (min-width: 1024px) { html.panel { font-size: 17px; } }
+@media (min-width: 1280px) { html.panel { font-size: 18px; } }
+@media (min-width: 1536px) { html.panel { font-size: 20px; } }
+
+/* ---------------------------------------------------------------- Movimiento
+   Entradas suaves y parallax. Todo se apaga con "reducir movimiento" del sistema (al final del archivo). */
+html { scroll-behavior: smooth; }
+
+@keyframes subir { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes subir-sutil { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes crecer { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes entrar-derecha { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+@keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes brillo-carga { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* La variable --i (0, 1, 2…) escalona la entrada de elementos hermanos.
+   Relleno "backwards": al terminar, el elemento vuelve a su estilo normal y el hover sigue funcionando. */
+.anim-subir { animation: subir 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 50ms); }
+.anim-subir-sutil { animation: subir-sutil 0.3s ease-out backwards; animation-delay: calc(var(--i, 0) * 40ms); }
+.anim-aparecer { animation: aparecer 0.35s ease-out backwards; }
+.anim-crecer { animation: crecer 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+.anim-entrar-derecha { animation: entrar-derecha 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+.anim-flotar { animation: flotar 5s ease-in-out infinite; }
+
+/* Tarjeta de carga con brillo que se desplaza. */
+.esqueleto {
+  background: linear-gradient(100deg, #e9e7e1 30%, #f6f5f1 50%, #e9e7e1 70%);
+  background-size: 200% 100%;
+  animation: brillo-carga 1.4s linear infinite;
+}
+
+/* Parallax: el contenedor lleva .parallax (y el gancho useParallax de movimiento.ts); dentro van las capas. */
+.parallax { --desplazo: 0; --mx: 0; --my: 0; position: relative; overflow: hidden; isolation: isolate; }
+.capa {
+  position: absolute;
+  inset: -25% -10%;
+  z-index: -1;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* Trama diagonal fina, se mueve poco. */
+.capa-trama {
+  background-image: repeating-linear-gradient(135deg, rgb(200 148 106 / 0.08) 0 1px, transparent 1px 22px);
+  transform: translate3d(calc(var(--mx) * -8px), calc(var(--desplazo) * 0.35px + var(--my) * -6px), 0);
+}
+/* Resplandor cobre, es la capa que más se mueve. */
+.capa-cobre {
+  background: radial-gradient(40rem 22rem at 18% 35%, rgb(200 148 106 / 0.3), transparent 65%);
+  transform: translate3d(calc(var(--mx) * 28px), calc(var(--desplazo) * 0.55px + var(--my) * 18px), 0);
+}
+/* Resplandor rojo, se mueve en sentido contrario al mouse. */
+.capa-rojo {
+  background: radial-gradient(34rem 20rem at 86% 70%, rgb(158 27 44 / 0.4), transparent 65%);
+  transform: translate3d(calc(var(--mx) * -34px), calc(var(--desplazo) * 0.2px + var(--my) * -22px), 0);
+}
+/* Versión sutil para el panel del administrador: un solo resplandor que apenas se desliza. */
+.capa-sutil {
+  background: radial-gradient(30rem 11rem at 85% 0%, rgb(200 148 106 / 0.26), transparent 70%);
+  transform: translate3d(calc(var(--desplazo) * -0.08px), 0, 0);
+}
+/* Titular que baja más lento que la página y se desvanece al avanzar. */
+.capa-titular {
+  transform: translate3d(0, calc(var(--desplazo) * 0.22px), 0);
+  opacity: calc(1 - var(--desplazo) / 380);
+  transition: transform 0.2s ease-out;
+}
+
+/* Burbuja del asistente: aro que se expande y se apaga, y ojos que parpadean cada tanto. */
+@keyframes halo { 0% { transform: scale(1); opacity: 0.7; } 70%, 100% { transform: scale(1.55); opacity: 0; } }
+@keyframes parpadeo { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+.halo { animation: halo 2.4s ease-out infinite; pointer-events: none; }
+.parpadeo { animation: parpadeo 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim-subir, .anim-subir-sutil, .anim-aparecer, .anim-crecer, .anim-entrar-derecha, .anim-flotar, .esqueleto, .halo, .parpadeo { animation: none; }
+  .halo { opacity: 0; }
+  .capa, .capa-titular { transform: none; transition: none; opacity: 1; }
 }

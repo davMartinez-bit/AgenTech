@@ -89,7 +89,7 @@ export function Chatbot({
 
   return (
     <aside
-      className={`fixed inset-y-0 right-0 z-30 flex w-full max-w-lg flex-col bg-white shadow-2xl transition-transform duration-300 ${
+      className={`fixed inset-y-0 right-0 z-30 flex w-full max-w-lg flex-col bg-white shadow-2xl transition-transform duration-300 ease-out ${
         abierto ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -99,7 +99,7 @@ export function Chatbot({
           <div className="font-bold">Asistente del vendedor</div>
           <div className="text-xs text-crema/70">Cuéntale lo que pide el cliente · solo productos con stock</div>
         </div>
-        <button onClick={cerrar} className="ml-auto rounded px-2 py-1 text-crema/80 hover:bg-white/10" aria-label="Cerrar">
+        <button onClick={cerrar} className="ml-auto rounded px-2 py-1 text-crema/80 transition active:scale-95 hover:bg-white/10" aria-label="Cerrar">
           ✕
         </button>
       </div>
@@ -107,11 +107,11 @@ export function Chatbot({
       <div className="flex-1 space-y-3 overflow-y-auto bg-fondo p-4">
         {mensajes.map((m, i) =>
           m.de === "vendedor" ? (
-            <div key={i} className="ml-auto max-w-[80%] rounded-2xl rounded-br-sm bg-negro px-4 py-2 text-white">
+            <div key={i} className="anim-subir ml-auto max-w-[80%] rounded-2xl rounded-br-sm bg-negro px-4 py-2 text-white">
               {m.texto}
             </div>
           ) : (
-            <div key={i} className="max-w-[95%] rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm">
+            <div key={i} className="anim-subir max-w-[95%] rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm">
               <p>{m.texto}</p>
               {m.consejo !== undefined && (
                 <p aria-live="polite" className="mt-2 rounded-lg border-l-4 border-cobre bg-crema/60 px-3 py-2 text-sm leading-relaxed">
@@ -157,7 +157,7 @@ export function Chatbot({
                   <div className="font-semibold">Quienes llevan “{m.resultado.resultados[0].nombre}” también llevan:</div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
                     {m.complementos.map((c) => (
-                      <button key={c.sku} onClick={() => abrir(c)} className="rounded-full bg-white px-2.5 py-1 text-xs hover:ring-1 hover:ring-cobre">
+                      <button key={c.sku} onClick={() => abrir(c)} className="rounded-full bg-white px-2.5 py-1 text-xs transition active:scale-95 hover:ring-1 hover:ring-cobre">
                         {c.nombre} · <span className="font-semibold text-rojo">{pesos(c.precio)}</span>
                       </button>
                     ))}
@@ -174,7 +174,7 @@ export function Chatbot({
       {mensajes.length < 2 && (
         <div className="flex flex-wrap gap-2 border-t border-borde px-4 py-2">
           {SUGERENCIAS.map((s) => (
-            <button key={s} onClick={() => enviar(s)} className="rounded-full bg-crema px-3 py-1 text-xs hover:brightness-95">
+            <button key={s} onClick={() => enviar(s)} className="rounded-full bg-crema px-3 py-1 text-xs transition active:scale-95 hover:brightness-95">
               {s}
             </button>
           ))}
@@ -187,7 +187,7 @@ export function Chatbot({
           placeholder="Lo que pide el cliente…"
           className="flex-1 rounded-xl border border-borde px-4 py-3 outline-none focus:border-cobre"
         />
-        <button disabled={pensando} className="rounded-xl bg-rojo px-5 font-bold text-white disabled:opacity-50">
+        <button disabled={pensando} className="rounded-xl bg-rojo px-5 font-bold text-white transition active:scale-95 disabled:opacity-50">
           Enviar
         </button>
       </form>
